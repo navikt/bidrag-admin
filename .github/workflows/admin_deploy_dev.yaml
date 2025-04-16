@@ -1,12 +1,11 @@
-name: Deploy Q1
+name: Deploy dev
 on:
   workflow_dispatch:
   schedule:
     - cron : '0 2 * * 1'
   push:
     branches:
-      - 'q1/**'
-      - 'Q1/**'
+      - '!main'
 
 jobs:
   build_and_deploy:
@@ -17,4 +16,25 @@ jobs:
     uses: navikt/bidrag-workflow/.github/workflows/deploy.yaml@main
     secrets: inherit
     with:
-      nais_variabler_filnavn: q1.yaml
+      maven_options: -B -q -fae -f bidrag-admin
+      ktlint_options: -f bidrag-admin
+      docker_context: ./bidrag-admin
+      nais_variabler_filnavn: bidrag-admin/dev.yaml
+      nais_hovedfil_navn: bidrag-admin/nais.yaml
+      image_suffix: bidrag-admin
+      tag: bidrag-admin
+
+  deploy_unleash:
+    runs-on: ubuntu-latest
+    name: Deploy unleash
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy unleash to prod-gcp
+        uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: prod-gcp
+          RESOURCE: .nais/bidrag-admin/unleash.yaml
+          VARS: .nais/bidrag-admin/dev.yaml

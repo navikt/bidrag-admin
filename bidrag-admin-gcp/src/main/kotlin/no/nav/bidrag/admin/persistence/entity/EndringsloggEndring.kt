@@ -11,7 +11,7 @@ import jakarta.persistence.ManyToOne
 import java.time.LocalDate
 
 @Entity(name = "endringslogg_endring")
-data class EndringsloggEndrng(
+data class EndringsloggEndring(
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

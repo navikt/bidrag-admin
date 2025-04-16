@@ -1,4 +1,4 @@
-package no.nav.bidrag.automatiskjobb.configuration
+package no.nav.bidrag.admin.configuration
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.util.StdDateFormat

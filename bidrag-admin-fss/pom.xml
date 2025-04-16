@@ -11,9 +11,9 @@
   </parent>
 
   <groupId>no.nav</groupId>
-  <artifactId>bidrag-admin-gcp</artifactId>
+  <artifactId>bidrag-admin-fss</artifactId>
   <version>${revision}</version>
-  <name>bidrag-admin-gcp</name>
+  <name>bidrag-admin-fss</name>
 
   <dependencies>
 

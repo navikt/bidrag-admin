@@ -1,4 +1,4 @@
-package no.nav.bidrag.automatiskjobb.configuration
+package no.nav.bidrag.admin.configuration
 
 import io.getunleash.DefaultUnleash
 import io.getunleash.UnleashContext
@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
 import io.swagger.v3.oas.annotations.info.Info
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.security.SecurityScheme
-import no.nav.bidrag.beregn.barnebidrag.service.AldersjusteringOrchestrator
 import no.nav.bidrag.commons.service.organisasjon.EnableSaksbehandlernavnProvider
 import no.nav.bidrag.commons.web.DefaultCorsFilter
 import no.nav.bidrag.commons.web.MdcFilter
@@ -25,7 +24,7 @@ import org.springframework.context.annotation.Scope
 
 @EnableAspectJAutoProxy
 @OpenAPIDefinition(
-    info = Info(title = "bidrag-automatisk-jobb", version = "v1"),
+    info = Info(title = "bidrag-admin", version = "v1"),
     security = [SecurityRequirement(name = "bearer-key")],
 )
 @SecurityScheme(bearerFormat = "JWT", name = "bearer-key", scheme = "bearer", type = SecuritySchemeType.HTTP)
@@ -33,7 +32,7 @@ import org.springframework.context.annotation.Scope
 @EnableJwtTokenValidation
 @EnableOAuth2Client(cacheEnabled = true)
 @EnableSaksbehandlernavnProvider
-@Import(DefaultCorsFilter::class, MdcFilter::class, AldersjusteringOrchestrator::class)
+@Import(DefaultCorsFilter::class, MdcFilter::class)
 class BidragAutomatiskJobbConfiguration {
     @Bean
     fun unleashConfig(

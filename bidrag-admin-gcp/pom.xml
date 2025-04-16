@@ -6,17 +6,21 @@
 
   <parent>
     <groupId>no.nav.bidrag</groupId>
-    <artifactId>bidrag-skatteetaten</artifactId>
+    <artifactId>bidrag-admin</artifactId>
     <version>${revision}</version>
   </parent>
 
   <groupId>no.nav</groupId>
-  <artifactId>bidrag-regnskap</artifactId>
+  <artifactId>bidrag-admin-gcp</artifactId>
   <version>${revision}</version>
-  <name>bidrag-regnskap</name>
+  <name>bidrag-admin-gcp</name>
 
   <dependencies>
-
+    <dependency>
+      <groupId>io.getunleash</groupId>
+      <artifactId>unleash-client-java</artifactId>
+      <version>10.1.0</version>
+    </dependency>
     <!-- Spring -->
     <dependency>
       <groupId>org.springframework.boot</groupId>

@@ -3,6 +3,12 @@ on:
   push:
     branches:
       - 'main'
+    paths:
+      - '.nais/bidrag-admin/**.yaml'
+      - '.github/workflows/admin_deploy_prod.yaml'
+      - 'pom.xml'
+      - '**/bidrag-admin/**'
+
 
 jobs:
   build_and_deploy:
@@ -12,6 +18,14 @@ jobs:
       id-token: "write"
     uses: navikt/bidrag-workflow/.github/workflows/deploy_prod.yaml@main
     secrets: inherit
+    with:
+      maven_options: -B -q -fae -f bidrag-admin
+      ktlint_options: -f bidrag-admin
+      docker_context: ./bidrag-admin
+      nais_variabler_filnavn: bidrag-admin/prod.yaml
+      nais_hovedfil_navn: bidrag-admin/nais.yaml
+      image_suffix: bidrag-admin
+      tag: bidrag-admin
 
   deploy_unleash:
     runs-on: ubuntu-latest
@@ -25,5 +39,5 @@ jobs:
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: prod-gcp
-          RESOURCE: .nais/unleash.yaml
-          VARS: .nais/prod.yaml
+          RESOURCE: .nais/bidrag-admin/unleash.yaml
+          VARS: .nais/bidrag-admin/prod.yaml

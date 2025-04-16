@@ -1,29 +1,29 @@
-name: bidrag-admin-q1
+name: bidrag-admin
 ingresses:
-  - https://bidrag-admin-q1.intern.dev.nav.no
+  - https://bidrag-admin.intern.dev.nav.no
 limits:
-  memory: 4000Mi
+  memory: 500Mi
 requests:
   cpu: 50m
-  memory: 1000Mi
+  memory: 200Mi
 replicas:
   max: 1
   min: 1
 database:
-  navn: bidrag-admin-q1
-  tier: db-custom-1-3840
-  size: 25
-  auditlog: "on"
+  navn: bidrag-admin-dev
+  tier: db-f1-micro
+  size: 10
+  auditlog: "off"
 kafka:
   pool: nav-dev
 env:
-  BIDRAG_ORGANISASJON_SCOPE: dev-fss.bidrag.bidrag-organisasjon-feature
-  BIDRAG_ORGANISASJON_URL: https://bidrag-organisasjon-feature.dev-fss-pub.nais.io/bidrag-organisasjon
+  BIDRAG_ORGANISASJON_SCOPE: dev-fss.bidrag.bidrag-organisasjon
+  BIDRAG_ORGANISASJON_URL: https://bidrag-organisasjon.dev-fss-pub.nais.io/bidrag-organisasjon
   JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp -XX:MaxRAMPercentage=80.0
 outbound-access-apps:
   - bidrag-kodeverk
 outbound-access-hosts:
-  - bidrag-organisasjon-feature.dev-fss-pub.nais.io
+  - bidrag-organisasjon.dev-fss-pub.nais.io
   - bidrag-unleash-api.nav.cloud.nais.io
 unleash:
   env: development
