@@ -16,8 +16,8 @@ jobs:
     uses: navikt/bidrag-workflow/.github/workflows/deploy.yaml@main
     secrets: inherit
     with:
-      maven_options: -B -q -fae -f bidrag-admin
-      ktlint_options: -f bidrag-admin
+      maven_options: -B -q -fae -f bidrag-admin-gcp
+      ktlint_options: -f bidrag-admin-gcp
       docker_context: ./bidrag-admin
       nais_variabler_filnavn: bidrag-admin/dev.yaml
       nais_hovedfil_navn: bidrag-admin/nais.yaml
