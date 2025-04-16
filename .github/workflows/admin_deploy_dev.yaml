@@ -33,9 +33,9 @@ jobs:
       id-token: "write"
     steps:
       - uses: actions/checkout@v4
-      - name: Deploy unleash to prod-gcp
+      - name: Deploy unleash to dev-gcp
         uses: nais/deploy/actions/deploy@v2
         env:
-          CLUSTER: prod-gcp
+          CLUSTER: dev-gcp
           RESOURCE: .nais/bidrag-admin/unleash.yaml
           VARS: .nais/bidrag-admin/dev.yaml
