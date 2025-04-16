@@ -42,7 +42,17 @@
       <version>${kotlin.version}</version>
     </dependency>
   </dependencies>
-
+  <repositories>
+    <repository>
+      <id>github</id>
+      <url>https://maven.pkg.github.com/navikt/bidrag-felles</url>
+    </repository>
+    <repository>
+      <id>confluent</id>
+      <name>Confluent kafka</name>
+      <url>https://packages.confluent.io/maven/</url>
+    </repository>
+  </repositories>
   <modules>
     <module>bidrag-admin-gcp</module>
     <module>bidrag-admin-fss</module>

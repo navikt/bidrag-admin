@@ -37,15 +37,9 @@ spec:
         {{/each}}
       outbound:
         external:
-        {{#each outbound-access-hosts}}
-            - host: {{this}}
-        {{/each}}
-        rules:
-        {{#each outbound-access-apps}}
-            - application: {{this}}
-        {{/each}}
-  secureLogs:
-    enabled: true
+          - host: {{env.BISYS_URL}}
+            ports:
+            - port: 9445
   kafka:
     pool: {{ kafka.pool }}
   image: {{ image }}
@@ -74,24 +68,6 @@ spec:
     disableAutoScaling: true
     max: {{replicas.max}}
     min: {{replicas.min}}
-  envFrom:
-    - secret: {{unleash.secret_name}}
-  gcp:
-    sqlInstances:
-      - name: {{ database.navn }}
-        type: POSTGRES_17
-        diskSize: {{ database.size }}
-        tier: {{ database.tier }}
-        databases:
-          - name: {{ database.navn }}
-            envVarPrefix: DB
-        flags:
-          - name: "cloudsql.enable_pgaudit"
-            value: "{{ database.auditlog }}"
-          - name: "pgaudit.log"
-            value: "write"
-          - name: "pgaudit.log_parameter"
-            value: "on"
   ingresses:
   {{#each ingresses as |url|}}
     - {{url}}

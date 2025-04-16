@@ -28,3 +28,10 @@ outbound-access-hosts:
 unleash:
   env: development
   secret_name: bidrag-admin-unleash-api-token
+azure_access_inbound:
+  - application: bidrag-ui
+    namespace: bidrag
+    cluster: dev-fss
+  - application: bidrag-ui-feature
+    namespace: bidrag
+    cluster: dev-fss

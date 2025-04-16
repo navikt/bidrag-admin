@@ -32,3 +32,7 @@ outbound-access-hosts:
 unleash:
   env: production
   secret_name: bidrag-admin-unleash-api-token
+azure_access_inbound:
+  - application: bidrag-ui
+    namespace: bidrag
+    cluster: prod-fss
