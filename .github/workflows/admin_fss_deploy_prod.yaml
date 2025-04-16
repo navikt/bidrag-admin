@@ -1,0 +1,30 @@
+name: Deploy dev
+on:
+  workflow_dispatch:
+  schedule:
+    - cron : '0 2 * * 1'
+  push:
+    branches:
+      - 'main'
+    paths:
+      - '.nais/bidrag-admin-fss/**.yaml'
+      - '.github/workflows/admin_fss_deploy_prod.yaml'
+      - 'pom.xml'
+      - '**/bidrag-admin-fss/**'
+jobs:
+  build_and_deploy:
+    name: "Build and deploy to prod"
+    permissions:
+      contents: "read"
+      id-token: "write"
+    uses: navikt/bidrag-workflow/.github/workflows/deploy.yaml@main
+    secrets: inherit
+    with:
+      nais_cluster: fss
+      maven_options: -B -q -fae -f bidrag-admin-fss
+      ktlint_options: -f bidrag-admin-fss
+      docker_context: ./bidrag-admin
+      nais_variabler_filnavn: bidrag-admin-fss/prod.yaml
+      nais_hovedfil_navn: bidrag-admin-fss/nais.yaml
+      image_suffix: bidrag-admin-fss
+      tag: bidrag-admin-fss
