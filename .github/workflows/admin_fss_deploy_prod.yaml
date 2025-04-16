@@ -1,4 +1,4 @@
-name: Deploy dev
+name: Deploy prod fss
 on:
   workflow_dispatch:
   schedule:
