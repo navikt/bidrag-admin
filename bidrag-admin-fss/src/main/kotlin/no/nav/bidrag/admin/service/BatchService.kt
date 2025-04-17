@@ -16,4 +16,8 @@ class BatchService(
     fun stopExecution(executionId: String): Boolean? = bisysConsumer.stopExecution(executionId)
 
     fun getExecutionParameters(executionId: String): String? = bisysConsumer.exectionParameters(executionId)
+
+    fun getExecutionSummary(executionId: String): String? = bisysConsumer.executionSummary(executionId)
+
+    fun getExecutionSummaries(executionId: String): Map<Long, String> = bisysConsumer.executionSummaries(executionId)
 }

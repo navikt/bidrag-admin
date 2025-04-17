@@ -56,5 +56,23 @@ class BisysBatchController(
     )
     fun executionParameters(
         @PathVariable executionId: String,
-    ) = service.stopExecution(executionId)
+    ) = service.getExecutionParameters(executionId)
+
+    @GetMapping("/summary/{executionId}")
+    @Operation(
+        description = "Hent sammendrag av kjøring",
+        security = [SecurityRequirement(name = "bearer-key")],
+    )
+    fun executionSummary(
+        @PathVariable executionId: String,
+    ) = service.getExecutionSummary(executionId)
+
+    @GetMapping("/summaries/{executionId}")
+    @Operation(
+        description = "Hent sammendrag av kjøring",
+        security = [SecurityRequirement(name = "bearer-key")],
+    )
+    fun executionSummaries(
+        @PathVariable executionId: String,
+    ) = service.getExecutionSummaries(executionId)
 }

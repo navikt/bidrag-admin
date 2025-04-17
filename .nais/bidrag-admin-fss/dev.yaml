@@ -10,7 +10,7 @@ replicas:
   max: 1
   min: 1
 env:
-  BISYS_URL: b27wasl00850.preprod.local
+  BISYS_URL: b27wasl00799.preprod.local
 azure_access_inbound:
   - application: bidrag-ui
     namespace: bidrag

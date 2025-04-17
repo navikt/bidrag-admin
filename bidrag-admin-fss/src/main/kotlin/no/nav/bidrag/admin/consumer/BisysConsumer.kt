@@ -64,6 +64,20 @@ class BisysConsumer(
                 String::class.java,
             ).body
 
+    fun executionSummary(executionId: String): String? =
+        getRestTemplate()
+            .getForEntity(
+                urlBuilder.pathSegment("execution", executionId, "summary").build().toUri(),
+                String::class.java,
+            ).body
+
+    fun executionSummaries(executionId: String): Map<Long, String> =
+        getRestTemplate()
+            .getForEntity(
+                urlBuilder.pathSegment("execution", executionId, "summaries").build().toUri(),
+                Map::class.java,
+            ).body as Map<Long, String>
+
     fun getRestTemplate(): RestTemplate {
         if (!localRun) {
             return RestTemplateBuilder().build()
