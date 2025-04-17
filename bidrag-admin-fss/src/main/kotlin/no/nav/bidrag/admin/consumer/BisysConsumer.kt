@@ -27,6 +27,41 @@ class BisysConsumer(
     fun getJobNames(): List<String> =
         getRestTemplate().getForEntity(urlBuilder.pathSegment("jobs").build().toUri(), List::class.java).body as List<String>
 
+    fun getRunningExecutions(jobName: String): List<Long> =
+        getRestTemplate()
+            .getForEntity(
+                urlBuilder.pathSegment("running", "executions", jobName).build().toUri(),
+                List::class.java,
+            ).body as List<Long>
+
+    fun launchJob(jobName: String): Long? =
+        getRestTemplate()
+            .getForEntity(
+                urlBuilder.pathSegment("launch", jobName).build().toUri(),
+                Long::class.java,
+            ).body
+
+    fun executionStatus(executionId: String): Int? =
+        getRestTemplate()
+            .getForEntity(
+                urlBuilder.pathSegment("execution", executionId, "status").build().toUri(),
+                Int::class.java,
+            ).body
+
+    fun stopExecution(executionId: String): Boolean? =
+        getRestTemplate()
+            .getForEntity(
+                urlBuilder.pathSegment("execution", executionId, "stop").build().toUri(),
+                Boolean::class.java,
+            ).body
+
+    fun exectionParameters(executionId: String): String? =
+        getRestTemplate()
+            .getForEntity(
+                urlBuilder.pathSegment("execution", executionId, "parameters").build().toUri(),
+                String::class.java,
+            ).body
+
     fun getRestTemplate(): RestTemplate {
         val acceptingTrustStrategy = TrustStrategy { x509Certificates, s -> true }
         val sslContext: SSLContext = SSLContexts.custom().loadTrustMaterial(null, acceptingTrustStrategy).build()
