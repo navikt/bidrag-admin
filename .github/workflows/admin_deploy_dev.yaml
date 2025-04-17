@@ -1,15 +1,16 @@
-name: Deploy dev
+name: Deploy dev gcp
 on:
   workflow_dispatch:
   schedule:
     - cron : '0 2 * * 1'
   push:
     branches:
+      - '**'
       - '!main'
 
 jobs:
   build_and_deploy:
-    name: "Build and deploy to Q1"
+    name: "Build and deploy to dev"
     permissions:
       contents: "read"
       id-token: "write"
@@ -18,7 +19,7 @@ jobs:
     with:
       maven_options: -B -q -fae -f bidrag-admin-gcp
       ktlint_options: -f bidrag-admin-gcp
-      docker_context: ./bidrag-admin
+      docker_context: ./bidrag-admin-gcp
       nais_variabler_filnavn: bidrag-admin/dev.yaml
       nais_hovedfil_navn: bidrag-admin/nais.yaml
       image_suffix: bidrag-admin
@@ -32,9 +33,9 @@ jobs:
       id-token: "write"
     steps:
       - uses: actions/checkout@v4
-      - name: Deploy unleash to prod-gcp
+      - name: Deploy unleash to dev-gcp
         uses: nais/deploy/actions/deploy@v2
         env:
-          CLUSTER: prod-gcp
+          CLUSTER: dev-gcp
           RESOURCE: .nais/bidrag-admin/unleash.yaml
           VARS: .nais/bidrag-admin/dev.yaml
