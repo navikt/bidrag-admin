@@ -21,6 +21,7 @@ spec:
         - id: secure_logs
   secureLogs:
       enabled: true
+  webproxy: true
   azure:
     application:
       enabled: true
