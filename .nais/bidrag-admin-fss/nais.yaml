@@ -40,8 +40,6 @@ spec:
           - host: {{env.BISYS_URL}}
             ports:
             - port: 9445
-  kafka:
-    pool: {{ kafka.pool }}
   image: {{ image }}
   liveness:
     path: /actuator/health

@@ -5,7 +5,7 @@ limits:
   memory: 500Mi
 requests:
   cpu: 50m
-  memory: 200Mi
+  memory: 100Mi
 replicas:
   max: 1
   min: 1
