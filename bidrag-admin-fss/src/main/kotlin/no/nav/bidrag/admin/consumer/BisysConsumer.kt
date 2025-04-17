@@ -8,6 +8,7 @@ import org.apache.hc.client5.http.ssl.NoopHostnameVerifier
 import org.apache.hc.core5.ssl.SSLContexts
 import org.apache.hc.core5.ssl.TrustStrategy
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
@@ -20,7 +21,7 @@ class BisysConsumer(
 ) {
     val urlBuilder get() =
         UriComponentsBuilder
-            .fromPath("https://$bisysBaseUrl")
+            .fromUriString("https://$bisysBaseUrl")
             .port("9445")
             .pathSegment("rtv-bidrag-batch", "rest", "batch")
 
@@ -75,6 +76,6 @@ class BisysConsumer(
                 ).build()
         val httpClient = HttpClients.custom().setConnectionManager(connectionManager).build()
         requestFactory.httpClient = httpClient
-        return RestTemplate(requestFactory)
+        return RestTemplateBuilder().build()
     }
 }
