@@ -11,7 +11,9 @@ class BatchService(
 
     fun launchJob(jobName: String): Long? = bisysConsumer.launchJob(jobName)
 
-    fun runninExecutions(jobName: String): List<Long> = bisysConsumer.getRunningExecutions(jobName)
+    fun runningExecutions(jobName: String): List<Long> = bisysConsumer.getRunningExecutions(jobName)
 
     fun stopExecution(executionId: String): Boolean? = bisysConsumer.stopExecution(executionId)
+
+    fun getExecutionParameters(executionId: String): String? = bisysConsumer.exectionParameters(executionId)
 }

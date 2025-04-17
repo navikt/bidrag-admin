@@ -1,5 +1,5 @@
 BISYS_URL: b27wasl00850.preprod.local
-
+IS_LOCAL: true
 ---
 spring:
   config:

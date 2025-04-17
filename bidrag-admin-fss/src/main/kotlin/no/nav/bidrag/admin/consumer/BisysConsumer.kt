@@ -18,6 +18,7 @@ import javax.net.ssl.SSLContext
 @Service
 class BisysConsumer(
     @Value("\${BISYS_URL}") private val bisysBaseUrl: String,
+    @Value("\${IS_LOCAL:false}") private val localRun: Boolean,
 ) {
     val urlBuilder get() =
         UriComponentsBuilder
@@ -64,6 +65,9 @@ class BisysConsumer(
             ).body
 
     fun getRestTemplate(): RestTemplate {
+        if (!localRun) {
+            return RestTemplateBuilder().build()
+        }
         val acceptingTrustStrategy = TrustStrategy { x509Certificates, s -> true }
         val sslContext: SSLContext = SSLContexts.custom().loadTrustMaterial(null, acceptingTrustStrategy).build()
         val csf = DefaultClientTlsStrategy(sslContext, NoopHostnameVerifier())
@@ -76,6 +80,6 @@ class BisysConsumer(
                 ).build()
         val httpClient = HttpClients.custom().setConnectionManager(connectionManager).build()
         requestFactory.httpClient = httpClient
-        return RestTemplateBuilder().build()
+        return RestTemplate(requestFactory)
     }
 }
