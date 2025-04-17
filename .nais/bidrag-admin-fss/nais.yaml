@@ -19,6 +19,8 @@ spec:
         - id: loki
         - id: elastic
         - id: secure_logs
+  secureLogs:
+      enabled: true
   azure:
     application:
       enabled: true
