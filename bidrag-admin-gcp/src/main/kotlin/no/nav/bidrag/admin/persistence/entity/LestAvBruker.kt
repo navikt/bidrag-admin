@@ -19,6 +19,9 @@ data class LestAvBruker(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "endringslogg_id", nullable = false)
     val endringslogg: Endringslogg? = null,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "driftsmelding_id", nullable = false)
+    val driftsmelding: Driftsmelding? = null,
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_id", nullable = false)
     val person: Person,

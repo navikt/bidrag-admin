@@ -2,9 +2,11 @@ package no.nav.bidrag.admin.dto
 
 import no.nav.bidrag.admin.persistence.entity.Endringslogg
 import no.nav.bidrag.commons.security.utils.TokenUtils
+import java.time.LocalDate
 
 data class EndringsLoggDto(
     val id: Long,
+    val dato: LocalDate,
     val tittel: String,
     val sammendrag: String,
     val erPåkrevd: Boolean,
@@ -20,10 +22,11 @@ data class EndringsLoggEndringDto(
 
 fun Endringslogg.toDto() =
     EndringsLoggDto(
-        id ?: -1,
-        tittel,
-        sammendrag,
-        erPåkrevd,
+        id = id ?: -1,
+        dato = aktivFraTidspunkt ?: opprettetTidspunkt,
+        tittel = tittel,
+        sammendrag = sammendrag,
+        erPåkrevd = erPåkrevd,
         endringer =
             endringer.sortedBy { it.rekkefølgeIndeks }.map {
                 EndringsLoggEndringDto(
