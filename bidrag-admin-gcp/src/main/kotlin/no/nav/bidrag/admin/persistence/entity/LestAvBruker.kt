@@ -7,9 +7,10 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToOne
 import java.time.LocalDateTime
 
-@Entity(name = "endringslogg_bruker_lesing")
+@Entity(name = "lest_av_bruker")
 data class LestAvBruker(
     @Id
     @Column(name = "id")
@@ -18,10 +19,12 @@ data class LestAvBruker(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "endringslogg_id", nullable = false)
     val endringslogg: Endringslogg? = null,
-    @Column(name = "ident", nullable = false)
-    val ident: String,
-    @Column(name = "navn", nullable = false)
-    val navn: String,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "driftsmelding_id", nullable = false)
+    val driftsmelding: Driftsmelding? = null,
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "person_id", nullable = false)
+    val person: Person,
     @Column(name = "lest_tidspunkt")
     val lestTidspunkt: LocalDateTime = LocalDateTime.now(),
 )

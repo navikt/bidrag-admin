@@ -11,7 +11,7 @@ import jakarta.persistence.ManyToOne
 import java.time.LocalDate
 
 @Entity(name = "endringslogg_endring")
-data class EndringsloggEndring(
+class EndringsloggEndring(
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +19,8 @@ data class EndringsloggEndring(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "endringslogg_id", nullable = false)
     open val endringslogg: Endringslogg,
-    val rekkefølgeIndeks: Int,
-    val innhold: String,
-    val tittel: String,
-    open var opprettetTidspunkt: LocalDate,
+    var rekkefølgeIndeks: Int,
+    var innhold: String,
+    var tittel: String,
+    open var opprettetTidspunkt: LocalDate = LocalDate.now(),
 )

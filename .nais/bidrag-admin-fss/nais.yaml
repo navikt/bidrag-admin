@@ -19,6 +19,9 @@ spec:
         - id: loki
         - id: elastic
         - id: secure_logs
+  secureLogs:
+      enabled: true
+  webproxy: true
   azure:
     application:
       enabled: true
@@ -40,8 +43,6 @@ spec:
           - host: {{env.BISYS_URL}}
             ports:
             - port: 9445
-  kafka:
-    pool: {{ kafka.pool }}
   image: {{ image }}
   liveness:
     path: /actuator/health

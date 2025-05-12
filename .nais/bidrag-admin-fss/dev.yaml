@@ -5,12 +5,12 @@ limits:
   memory: 500Mi
 requests:
   cpu: 50m
-  memory: 200Mi
+  memory: 100Mi
 replicas:
   max: 1
   min: 1
 env:
-  BISYS_URL: b27wasl00850.preprod.local
+  BISYS_URL: b27wasl00799.preprod.local
 azure_access_inbound:
   - application: bidrag-ui
     namespace: bidrag
