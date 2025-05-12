@@ -22,7 +22,7 @@ jobs:
     with:
       maven_options: -B -q -fae -f bidrag-admin-gcp
       ktlint_options: -f bidrag-admin-gcp
-      docker_context: ./bidrag-admin
+      docker_context: ./bidrag-admin-gcp
       nais_variabler_filnavn: bidrag-admin/prod.yaml
       nais_hovedfil_navn: bidrag-admin/nais.yaml
       image_suffix: bidrag-admin
