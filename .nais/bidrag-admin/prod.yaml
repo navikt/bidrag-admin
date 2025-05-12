@@ -12,7 +12,7 @@ replicas:
 database:
   navn: bidrag-admin-prod
   tier: db-custom-1-3840
-  size: 25
+  size: 10
   auditlog: "on"
 kafka:
   pool: nav-prod
