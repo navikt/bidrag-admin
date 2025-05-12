@@ -26,23 +26,47 @@ class EndringsloggService(
     private val personrepository: Personrepository,
     private val lestAvBrukerRepository: LestAvBrukerRepository,
 ) {
+    val EndringsloggTilhørerSkjermbilde.tilTyper
+        get() =
+            when (this) {
+                EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE ->
+                    listOf(
+                        EndringsloggTilhørerSkjermbilde.BEHANDLING_BIDRAG,
+                        EndringsloggTilhørerSkjermbilde.BEHANDLING_FORSKUDD,
+                        EndringsloggTilhørerSkjermbilde.BEHANDLING_SÆRBIDRAG,
+                        EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE,
+                    )
+                EndringsloggTilhørerSkjermbilde.BEHANDLING_SÆRBIDRAG ->
+                    listOf(
+                        EndringsloggTilhørerSkjermbilde.BEHANDLING_SÆRBIDRAG,
+                        EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE,
+                    )
+                EndringsloggTilhørerSkjermbilde.BEHANDLING_FORSKUDD ->
+                    listOf(
+                        EndringsloggTilhørerSkjermbilde.BEHANDLING_FORSKUDD,
+                        EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE,
+                    )
+                EndringsloggTilhørerSkjermbilde.BEHANDLING_BIDRAG ->
+                    listOf(
+                        EndringsloggTilhørerSkjermbilde.BEHANDLING_BIDRAG,
+                        EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE,
+                    )
+                else -> listOf(this)
+            }
+
     @Transactional
     fun hentAlleForType(type: EndringsloggTilhørerSkjermbilde): List<EndringsLoggDto> =
-        endringsloggRepository.findAllByTilhørerSkjermbilde(type).map { it.toDto() }
+        endringsloggRepository.findAllByTilhørerSkjermbilde(type.tilTyper).map { it.toDto() }
 
     fun hentEndringslogg(endringsloggId: Long): Endringslogg =
         endringsloggRepository
             .findById(
                 endringsloggId,
-            ).orElseThrow { IllegalArgumentException("Endringslogg med id $endringsloggId finnes ikke") }
+            ).orElseThrow { ugyldigForespørsel("Endringslogg med id $endringsloggId finnes ikke") }
 
     @Transactional
     fun oppdaterLestAvBruker(endringsloggId: Long) {
-        val endringslogg =
-            endringsloggRepository
-                .findById(endringsloggId)
-                .orElseThrow { IllegalArgumentException("Endringslogg med id $endringsloggId finnes ikke") }
-
+        val endringslogg = hentEndringslogg(endringsloggId)
         val person =
             personrepository.findByNavIdent(TokenUtils.hentSaksbehandlerIdent()!!)
                 ?: run {
@@ -85,10 +109,7 @@ class EndringsloggService(
         endringsloggId: Long,
         request: LeggTilEndringsloggEndring,
     ): Endringslogg {
-        val endringslogg =
-            endringsloggRepository
-                .findById(endringsloggId)
-                .orElseThrow { IllegalArgumentException("Endringslogg med id $endringsloggId finnes ikke") }
+        val endringslogg = hentEndringslogg(endringsloggId)
 
         val sisteRekkefølgeIndeks = endringslogg.endringer.size
         endringslogg.endringer.add(

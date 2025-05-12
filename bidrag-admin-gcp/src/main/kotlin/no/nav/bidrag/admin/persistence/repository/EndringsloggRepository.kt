@@ -7,9 +7,9 @@ import org.springframework.data.repository.CrudRepository
 
 interface EndringsloggRepository : CrudRepository<Endringslogg, Long> {
     @Query(
-        "select e from endringslogg e where e.tilhørerSkjermbilde = :type and " +
+        "select e from endringslogg e where e.tilhørerSkjermbilde in :type and " +
             "e.aktivFraTidspunkt is not null and e.aktivFraTidspunkt <= current_date " +
             "and e.aktivTilTidspunkt is null or e.aktivTilTidspunkt > current_date",
     )
-    fun findAllByTilhørerSkjermbilde(type: EndringsloggTilhørerSkjermbilde): List<Endringslogg>
+    fun findAllByTilhørerSkjermbilde(type: List<EndringsloggTilhørerSkjermbilde>): List<Endringslogg>
 }
