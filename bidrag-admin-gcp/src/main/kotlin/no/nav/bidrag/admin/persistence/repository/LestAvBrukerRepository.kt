@@ -1,6 +1,6 @@
 package no.nav.bidrag.admin.persistence.repository
 
-import no.nav.bidrag.admin.persistence.entity.Driftsmelding
+import no.nav.bidrag.admin.persistence.entity.DriftsmeldingHistorikk
 import no.nav.bidrag.admin.persistence.entity.Endringslogg
 import no.nav.bidrag.admin.persistence.entity.LestAvBruker
 import no.nav.bidrag.admin.persistence.entity.Person
@@ -12,8 +12,8 @@ interface LestAvBrukerRepository : CrudRepository<LestAvBruker, Long> {
         endringslogg: Endringslogg,
     ): LestAvBruker?
 
-    fun findByPersonAndDriftsmelding(
+    fun findByPersonAndDriftsmeldingHistorikk(
         person: Person,
-        driftsmelding: Driftsmelding,
+        driftsmelding: DriftsmeldingHistorikk,
     ): LestAvBruker?
 }

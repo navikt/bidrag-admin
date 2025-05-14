@@ -13,9 +13,10 @@ import no.nav.bidrag.admin.persistence.entity.Person
 import no.nav.bidrag.admin.persistence.repository.EndringsloggRepository
 import no.nav.bidrag.admin.persistence.repository.LestAvBrukerRepository
 import no.nav.bidrag.admin.persistence.repository.Personrepository
+import no.nav.bidrag.admin.utils.hentBrukerIdent
+import no.nav.bidrag.admin.utils.hentBrukerNavn
 import no.nav.bidrag.admin.utils.ugyldigForespørsel
 import no.nav.bidrag.commons.security.utils.TokenUtils
-import no.nav.bidrag.commons.service.organisasjon.SaksbehandlernavnProvider
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -181,10 +182,8 @@ class EndringsloggService(
                 erPåkrevd = request.erPåkrevd,
                 aktivFraTidspunkt = request.aktivFraTidspunkt,
                 aktivTilTidspunkt = request.aktivTilTidspunkt,
-                opprettetAv = TokenUtils.hentSaksbehandlerIdent() ?: TokenUtils.hentApplikasjonsnavn()!!,
-                opprettetAvNavn =
-                    TokenUtils.hentSaksbehandlerIdent()?.let { SaksbehandlernavnProvider.hentSaksbehandlernavn(it) }
-                        ?: TokenUtils.hentApplikasjonsnavn()!!,
+                opprettetAv = hentBrukerIdent(),
+                opprettetAvNavn = hentBrukerNavn(),
             )
         return endringsloggRepository.save(endringsLogg)
     }
