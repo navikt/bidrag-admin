@@ -2,7 +2,7 @@ name: bidrag-admin
 ingresses:
   - https://bidrag-admin.intern.nav.no
 limits:
-  memory: 500Mi
+  memory: 1000Mi
 requests:
   cpu: 50m
   memory: 200Mi
