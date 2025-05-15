@@ -1,10 +1,8 @@
 package no.nav.bidrag.admin.service
 
-import no.nav.bidrag.admin.dto.EndringsLoggDto
 import no.nav.bidrag.admin.dto.LeggTilEndringsloggEndring
 import no.nav.bidrag.admin.dto.OppdaterEndringsloggRequest
 import no.nav.bidrag.admin.dto.OpprettEndringsloggRequest
-import no.nav.bidrag.admin.dto.toDto
 import no.nav.bidrag.admin.persistence.entity.Endringslogg
 import no.nav.bidrag.admin.persistence.entity.EndringsloggEndring
 import no.nav.bidrag.admin.persistence.entity.EndringsloggTilhørerSkjermbilde
@@ -56,8 +54,8 @@ class EndringsloggService(
             }
 
     @Transactional
-    fun hentAlleForType(type: EndringsloggTilhørerSkjermbilde): List<EndringsLoggDto> =
-        endringsloggRepository.findAllByTilhørerSkjermbilde(type.tilTyper).map { it.toDto() }
+    fun hentAlleForType(type: EndringsloggTilhørerSkjermbilde): List<Endringslogg> =
+        endringsloggRepository.findAllByTilhørerSkjermbilde(type.tilTyper)
 
     fun hentEndringslogg(endringsloggId: Long): Endringslogg =
         endringsloggRepository

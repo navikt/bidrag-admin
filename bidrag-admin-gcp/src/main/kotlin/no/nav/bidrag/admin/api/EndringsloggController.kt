@@ -32,7 +32,10 @@ class EndringsloggController(
     )
     fun hentAlleEndringslogg(
         @RequestBody request: HentEndringsloggRequest,
-    ) = endringsloggService.hentAlleForType(request.skjermbilde)
+    ) = endringsloggService
+        .hentAlleForType(request.skjermbilde)
+        .sortedByDescending { it.aktivFraTidspunkt }
+        .map { it.toDto() }
 
     @GetMapping("/{endringsloggId}")
     @Operation(
