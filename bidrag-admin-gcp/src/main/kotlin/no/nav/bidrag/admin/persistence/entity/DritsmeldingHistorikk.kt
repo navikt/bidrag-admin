@@ -1,5 +1,6 @@
 package no.nav.bidrag.admin.persistence.entity
 
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -10,29 +11,37 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
-import java.time.LocalDate
+import java.time.LocalDateTime
 
-@Entity(name = "endringslogg_endring")
-class EndringsloggEndring(
+@Entity(name = "driftsmelding_historikk")
+class DriftsmeldingHistorikk(
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "endringslogg_id", nullable = false)
-    open val endringslogg: Endringslogg,
-    var rekkefølgeIndeks: Int,
+    @JoinColumn(name = "driftsmelding_id", nullable = false)
+    open val driftsmelding: Driftsmelding,
+    open var opprettetTidspunkt: LocalDateTime = LocalDateTime.now(),
+    open var aktivFraTidspunkt: LocalDateTime? = null,
+    open var aktivTilTidspunkt: LocalDateTime? = null,
     var innhold: String,
-    var tittel: String,
-    open var opprettetTidspunkt: LocalDate = LocalDate.now(),
+    val opprettetAv: String,
+    val opprettetAvNavn: String,
+    @Schema(enumAsRef = true)
+    var status: DriftsmeldingStatus,
     @OneToMany(
-        mappedBy = "endringsloggEndring",
+        mappedBy = "driftsmeldingHistorikk",
         cascade = [CascadeType.ALL],
         orphanRemoval = true,
         fetch = FetchType.EAGER,
     )
     val brukerLesinger: MutableSet<LestAvBruker> = mutableSetOf(),
-) {
-    override fun toString(): String =
-        "EndringsloggEndring(id=$id, innhold='$innhold', tittel='$tittel', rekkefølgeIndeks=$rekkefølgeIndeks)"
+)
+
+enum class DriftsmeldingStatus {
+    KRITISK,
+    VARSEL,
+    INFO,
+    AVSLUTTET,
 }

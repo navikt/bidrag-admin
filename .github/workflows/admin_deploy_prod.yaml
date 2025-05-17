@@ -8,7 +8,7 @@ on:
       - '.nais/bidrag-admin/**.yaml'
       - '.github/workflows/admin_deploy_prod.yaml'
       - 'pom.xml'
-      - '**/bidrag-admin/**'
+      - '**/bidrag-admin-gcp/**'
 
 
 jobs:
