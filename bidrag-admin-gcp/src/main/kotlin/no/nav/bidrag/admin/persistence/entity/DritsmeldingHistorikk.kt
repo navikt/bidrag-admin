@@ -11,7 +11,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Entity(name = "driftsmelding_historikk")
 class DriftsmeldingHistorikk(
@@ -22,9 +22,9 @@ class DriftsmeldingHistorikk(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "driftsmelding_id", nullable = false)
     open val driftsmelding: Driftsmelding,
-    open var opprettetTidspunkt: LocalDate = LocalDate.now(),
-    open var aktivFraTidspunkt: LocalDate? = null,
-    open var aktivTilTidspunkt: LocalDate? = null,
+    open var opprettetTidspunkt: LocalDateTime = LocalDateTime.now(),
+    open var aktivFraTidspunkt: LocalDateTime? = null,
+    open var aktivTilTidspunkt: LocalDateTime? = null,
     var innhold: String,
     val opprettetAv: String,
     val opprettetAvNavn: String,

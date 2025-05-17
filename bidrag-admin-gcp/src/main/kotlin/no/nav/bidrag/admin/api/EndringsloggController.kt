@@ -2,14 +2,12 @@ package no.nav.bidrag.admin.api
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
-import no.nav.bidrag.admin.dto.HentEndringsloggRequest
-import no.nav.bidrag.admin.dto.LeggTilEndringsloggEndring
 import no.nav.bidrag.admin.dto.OppdaterEndringsloggRequest
 import no.nav.bidrag.admin.dto.OpprettEndringsloggRequest
 import no.nav.bidrag.admin.dto.toDto
+import no.nav.bidrag.admin.persistence.entity.EndringsloggTilhørerSkjermbilde
 import no.nav.bidrag.admin.service.EndringsloggService
 import no.nav.security.token.support.core.api.Protected
-import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -25,15 +24,15 @@ import org.springframework.web.bind.annotation.RestController
 class EndringsloggController(
     private val endringsloggService: EndringsloggService,
 ) {
-    @PostMapping("/liste")
+    @GetMapping
     @Operation(
-        summary = "Hent liste over endringslogg for skjermbilde",
+        summary = "Hent liste over endringslogg for en skjermbilde eller alle",
         security = [SecurityRequirement(name = "bearer-key")],
     )
     fun hentAlleEndringslogg(
-        @RequestBody request: HentEndringsloggRequest,
+        @RequestParam(required = false) skjermbilde: List<EndringsloggTilhørerSkjermbilde> = emptyList(),
     ) = endringsloggService
-        .hentAlleForType(request.skjermbilde)
+        .hentAlleForType(skjermbilde)
         .sortedByDescending { it.aktivFraTidspunkt }
         .map { it.toDto() }
 
@@ -51,9 +50,9 @@ class EndringsloggController(
         summary = "Oppdater endringslogg at den er lest av bruker. Brukerdetaljer hentes fra token",
         security = [SecurityRequirement(name = "bearer-key")],
     )
-    fun oppdaterLestAvBruker(
+    fun oppdaterLestAvBrukerEndringslogg(
         @PathVariable endringsloggId: Long,
-    ) = endringsloggService.oppdaterLestAvBruker(endringsloggId)
+    ) = endringsloggService.oppdaterLestAvBruker(endringsloggId).toDto()
 
     @PostMapping
     @Operation(
@@ -73,26 +72,6 @@ class EndringsloggController(
         @PathVariable endringsloggId: Long,
         @RequestBody request: OppdaterEndringsloggRequest,
     ) = endringsloggService.oppdaterEndringslogg(endringsloggId, request).toDto()
-
-    @DeleteMapping("/{endringsloggId}/endring/{endringId}")
-    @Operation(
-        summary = "Slett endringslogg endring",
-        security = [SecurityRequirement(name = "bearer-key")],
-    )
-    fun slettEndring(
-        @PathVariable endringsloggId: Long,
-        @PathVariable endringId: Long,
-    ) = endringsloggService.slettEndring(endringsloggId, endringId).toDto()
-
-    @PostMapping("/{endringsloggId}/endring")
-    @Operation(
-        summary = "Legg til en ny endring i endringslogg",
-        security = [SecurityRequirement(name = "bearer-key")],
-    )
-    fun leggTilEndring(
-        @PathVariable endringsloggId: Long,
-        @RequestBody request: LeggTilEndringsloggEndring,
-    ) = endringsloggService.leggTilEndringsloggEndring(endringsloggId, request).toDto()
 
     @PatchMapping("/{endringsloggId}/deaktiver")
     @Operation(

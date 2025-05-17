@@ -17,6 +17,9 @@ data class LestAvBruker(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "endringslogg_endring_id", nullable = false)
+    val endringsloggEndring: EndringsloggEndring? = null,
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "endringslogg_id", nullable = false)
     val endringslogg: Endringslogg? = null,
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,5 +29,5 @@ data class LestAvBruker(
     @JoinColumn(name = "person_id", nullable = false)
     val person: Person,
     @Column(name = "lest_tidspunkt")
-    val lestTidspunkt: LocalDateTime = LocalDateTime.now(),
+    var lestTidspunkt: LocalDateTime = LocalDateTime.now(),
 )

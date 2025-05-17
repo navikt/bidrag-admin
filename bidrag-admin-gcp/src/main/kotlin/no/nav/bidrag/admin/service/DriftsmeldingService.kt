@@ -17,7 +17,7 @@ import no.nav.bidrag.admin.utils.ugyldigForespørsel
 import no.nav.bidrag.commons.security.utils.TokenUtils
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Service
 class DriftsmeldingService(
@@ -69,7 +69,7 @@ class DriftsmeldingService(
         val driftsmelding = hentDriftsmelding(driftsmeldingId)
 
         val historikk = driftsmelding.hentDriftsmeldingHistorikk(driftsmeldingHistorikkId)
-        historikk.aktivTilTidspunkt = LocalDate.now()
+        historikk.aktivTilTidspunkt = LocalDateTime.now().minusMinutes(1)
         return driftsmelding
     }
 
@@ -147,8 +147,8 @@ class DriftsmeldingService(
             )
         driftsmelding.historikk
             .filter { it.aktivFraTidspunkt != null && it.aktivFraTidspunkt!! < request.aktivFraTidspunkt }
-            .maxBy { it.aktivFraTidspunkt!! }
-            .let {
+            .maxByOrNull { it.aktivFraTidspunkt!! }
+            ?.let {
                 it.aktivTilTidspunkt = request.aktivFraTidspunkt
             }
         driftsmelding.historikk.add(
@@ -169,7 +169,7 @@ class DriftsmeldingService(
     fun aktiverDriftsmelding(driftsmeldingId: Long): Driftsmelding {
         val driftsmelding = hentDriftsmelding(driftsmeldingId)
 
-        driftsmelding.aktivFraTidspunkt = LocalDate.now()
+        driftsmelding.aktivFraTidspunkt = LocalDateTime.now()
         driftsmelding.aktivTilTidspunkt = null
         return driftsmelding
     }
@@ -178,7 +178,7 @@ class DriftsmeldingService(
     fun deaktiverDriftsmelding(driftsmeldingId: Long): Driftsmelding {
         val driftsmelding = hentDriftsmelding(driftsmeldingId)
 
-        driftsmelding.aktivTilTidspunkt = LocalDate.now()
+        driftsmelding.aktivTilTidspunkt = LocalDateTime.now()
         return driftsmelding
     }
 }

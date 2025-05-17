@@ -8,7 +8,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Entity(name = "driftsmelding")
 class Driftsmelding(
@@ -16,9 +16,9 @@ class Driftsmelding(
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
-    open var opprettetTidspunkt: LocalDate = LocalDate.now(),
-    open var aktivFraTidspunkt: LocalDate? = null,
-    open var aktivTilTidspunkt: LocalDate? = null,
+    open var opprettetTidspunkt: LocalDateTime = LocalDateTime.now(),
+    open var aktivFraTidspunkt: LocalDateTime? = null,
+    open var aktivTilTidspunkt: LocalDateTime? = null,
     var tittel: String,
     val opprettetAv: String,
     val opprettetAvNavn: String,

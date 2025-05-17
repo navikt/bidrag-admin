@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController
 class DriftsmeldingController(
     private val driftsmeldingService: DriftsmeldingService,
 ) {
-    @GetMapping("/aktive")
+    @GetMapping
     @Operation(
         summary = "Hent alle aktive driftsmeldinger",
         security = [SecurityRequirement(name = "bearer-key")],
