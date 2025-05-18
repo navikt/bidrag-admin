@@ -14,7 +14,8 @@ data class OppdaterEndringsloggRequest(
     val erPåkrevd: Boolean? = null,
     val aktivFraTidspunkt: LocalDate? = null,
     val aktivTilTidspunkt: LocalDate? = null,
-//    val endringer: List<OppdaterEndringsloggEndring>? = null,
+    val endringer: List<OppdaterEndringsloggEndring>? = null,
+    val endringstyper: List<Endringstype>? = null,
 )
 
 data class OppdaterEndringsloggEndring(
@@ -32,6 +33,7 @@ data class OpprettEndringsloggRequest(
     val aktivFraTidspunkt: LocalDate? = null,
     val aktivTilTidspunkt: LocalDate? = null,
     val endringstyper: List<Endringstype>,
+    val endringer: List<LeggTilEndringsloggEndring>? = null,
 )
 
 data class LeggTilEndringsloggEndring(

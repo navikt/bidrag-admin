@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import no.nav.bidrag.admin.dto.LeggTilEndringsloggEndring
 import no.nav.bidrag.admin.dto.toDto
-import no.nav.bidrag.admin.service.EndringsloggEndringService
+import no.nav.bidrag.admin.service.EndringsloggService
 import no.nav.security.token.support.core.api.Protected
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 @Protected
 @RequestMapping("/endringslogg")
 class EndringsloggEndringController(
-    private val endringsloggEndringService: EndringsloggEndringService,
+    private val endringsloggService: EndringsloggService,
 ) {
     @PostMapping("/{endringsloggId}/lest/{endringId}")
     @Operation(
@@ -27,7 +27,7 @@ class EndringsloggEndringController(
     fun oppdaterLestAvBrukerEndring(
         @PathVariable endringsloggId: Long,
         @PathVariable endringId: Long,
-    ) = endringsloggEndringService.oppdaterLestAvBrukerEndring(endringsloggId, endringId)
+    ) = endringsloggService.oppdaterLestAvBrukerEndring(endringsloggId, endringId).toDto()
 
     @DeleteMapping("/{endringsloggId}/endring/{endringId}")
     @Operation(
@@ -37,7 +37,7 @@ class EndringsloggEndringController(
     fun slettEndring(
         @PathVariable endringsloggId: Long,
         @PathVariable endringId: Long,
-    ) = endringsloggEndringService.slettEndring(endringsloggId, endringId).toDto()
+    ) = endringsloggService.slettEndring(endringsloggId, endringId).toDto()
 
     @PostMapping("/{endringsloggId}/endring")
     @Operation(
@@ -47,5 +47,5 @@ class EndringsloggEndringController(
     fun leggTilEndring(
         @PathVariable endringsloggId: Long,
         @RequestBody request: LeggTilEndringsloggEndring,
-    ) = endringsloggEndringService.leggTilEndringsloggEndring(endringsloggId, request).toDto()
+    ) = endringsloggService.leggTilEndringsloggEndring(endringsloggId, request).toDto()
 }

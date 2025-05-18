@@ -34,10 +34,9 @@ class Endringslogg(
     open var tilhørerSkjermbilde: EndringsloggTilhørerSkjermbilde,
     var tittel: String,
     var sammendrag: String,
-    var innhold: String? = null,
     var erPåkrevd: Boolean = false,
     @Enumerated(EnumType.STRING)
-    val endringstype: List<Endringstype> = listOf(Endringstype.ENDRING),
+    var endringstyper: List<Endringstype> = listOf(Endringstype.ENDRING),
     val opprettetAv: String,
     val opprettetAvNavn: String,
     @OneToMany(
@@ -49,10 +48,17 @@ class Endringslogg(
     val brukerLesinger: MutableSet<LestAvBruker> = mutableSetOf(),
 ) {
     val erAlleLestAvBruker get() =
-        endringer.all { e ->
-            e.brukerLesinger.any {
+        if (endringer.isEmpty()) {
+            brukerLesinger.any {
                 it.person.navIdent ==
                     TokenUtils.hentSaksbehandlerIdent()
+            }
+        } else {
+            endringer.all { e ->
+                e.brukerLesinger.any {
+                    it.person.navIdent ==
+                        TokenUtils.hentSaksbehandlerIdent()
+                }
             }
         }
 

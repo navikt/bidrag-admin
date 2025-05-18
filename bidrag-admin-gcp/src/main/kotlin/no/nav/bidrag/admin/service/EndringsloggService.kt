@@ -1,9 +1,11 @@
 package no.nav.bidrag.admin.service
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import no.nav.bidrag.admin.dto.LeggTilEndringsloggEndring
 import no.nav.bidrag.admin.dto.OppdaterEndringsloggRequest
 import no.nav.bidrag.admin.dto.OpprettEndringsloggRequest
 import no.nav.bidrag.admin.persistence.entity.Endringslogg
+import no.nav.bidrag.admin.persistence.entity.EndringsloggEndring
 import no.nav.bidrag.admin.persistence.entity.EndringsloggTilhørerSkjermbilde
 import no.nav.bidrag.admin.persistence.entity.LestAvBruker
 import no.nav.bidrag.admin.persistence.entity.Person
@@ -122,23 +124,23 @@ class EndringsloggService(
         endringslogg.erPåkrevd = request.erPåkrevd ?: endringslogg.erPåkrevd
         endringslogg.tittel = request.tittel ?: endringslogg.tittel
         endringslogg.sammendrag = request.sammendrag ?: endringslogg.sammendrag
-        endringslogg.innhold = request.innhold ?: endringslogg.innhold
-//        val endringerRequestIds = request.endringer?.map { it.id }?.toHashSet()
-//        if (endringerRequestIds != null && endringerRequestIds.size == endringslogg.endringer.size) {
-//            val nyeEndringer =
-//                request.endringer
-//                    .mapIndexed { index, endringRequest ->
-//                        val endring =
-//                            endringslogg.endringer.find { e -> e.id == endringRequest.id }
-//                                ?: ugyldigForespørsel("Endringslogg endring med id ${endringRequest.id} finnes ikke")
-//                        endring.tittel = endringRequest.tittel ?: endring.tittel
-//                        endring.innhold = endringRequest.innhold ?: endring.innhold
-//                        endring.rekkefølgeIndeks = index
-//                        endring
-//                    }
-//            endringslogg.endringer.clear()
-//            endringslogg.endringer.addAll(nyeEndringer)
-//        }
+        endringslogg.endringstyper = request.endringstyper ?: endringslogg.endringstyper
+        val endringerRequestIds = request.endringer?.map { it.id }?.toHashSet()
+        if (endringerRequestIds != null && endringerRequestIds.size == endringslogg.endringer.size) {
+            val nyeEndringer =
+                request.endringer
+                    .mapIndexed { index, endringRequest ->
+                        val endring =
+                            endringslogg.endringer.find { e -> e.id == endringRequest.id }
+                                ?: ugyldigForespørsel("Endringslogg endring med id ${endringRequest.id} finnes ikke")
+                        endring.tittel = endringRequest.tittel ?: endring.tittel
+                        endring.innhold = endringRequest.innhold ?: endring.innhold
+                        endring.rekkefølgeIndeks = index
+                        endring
+                    }
+            endringslogg.endringer.clear()
+            endringslogg.endringer.addAll(nyeEndringer)
+        }
         return endringslogg
     }
 
@@ -169,15 +171,118 @@ class EndringsloggService(
                 tilhørerSkjermbilde = request.tilhørerSkjermbilde,
                 sammendrag = request.sammendrag,
                 erPåkrevd = request.erPåkrevd,
-                innhold = request.innhold,
                 aktivFraTidspunkt = request.aktivFraTidspunkt,
                 aktivTilTidspunkt = request.aktivTilTidspunkt,
                 opprettetAv = hentBrukerIdent(),
                 opprettetAvNavn = hentBrukerNavn(),
-                endringstype = request.endringstyper,
+                endringstyper = request.endringstyper,
             )
+        request.endringer?.forEachIndexed { index, endringRequest ->
+            endringsLogg.endringer.add(
+                EndringsloggEndring(
+                    endringslogg = endringsLogg,
+                    tittel = endringRequest.tittel,
+                    innhold = endringRequest.innhold,
+                    rekkefølgeIndeks = index,
+                ),
+            )
+        }
         val endringslogg = endringsloggRepository.save(endringsLogg)
         log.info { "Opprettet enddringslogg $endringslogg" }
+        return endringslogg
+    }
+
+    @Transactional
+    fun oppdaterLestAvBrukerEndring(
+        endringsloggId: Long,
+        endringsloggEndringId: Long,
+    ): Endringslogg {
+        log.info {
+            "Oppdaterer lest av bruker for endringslogg endring $endringsloggEndringId i endringslogg $endringsloggId og saksbehandler ${TokenUtils.hentSaksbehandlerIdent()}"
+        }
+        val endringslogg = hentEndringslogg(endringsloggId)
+        val person =
+            personrepository.findByNavIdent(TokenUtils.hentSaksbehandlerIdent()!!)
+                ?: run {
+                    personrepository.save(
+                        Person(
+                            navIdent = TokenUtils.hentSaksbehandlerIdent()!!,
+                            navn = TokenUtils.hentBruker() ?: "",
+                        ),
+                    )
+                }
+
+        val endringsloggEndring = endringslogg.hentEndring(endringsloggEndringId)
+        val lestAvBruker =
+            lestAvBrukerRepository
+                .findByPersonAndEndringsloggEndring(person, endringsloggEndring)
+                ?: run {
+                    val lestAvBrukerNy =
+                        LestAvBruker(
+                            person = person,
+                            endringsloggEndring = endringsloggEndring,
+                        )
+                    endringsloggEndring.brukerLesinger.add(lestAvBrukerRepository.save(lestAvBrukerNy))
+                    endringsloggRepository.save(endringslogg)
+                    lestAvBrukerNy
+                }
+
+        lestAvBruker.lestTidspunkt = LocalDateTime.now()
+        log.info {
+            "Oppdaterte lest av bruker for endringslogg endring ${endringsloggEndring.id} i endringslogg $endringsloggId og saksbehandler ${TokenUtils.hentSaksbehandlerIdent()}"
+        }
+
+        if (endringslogg.erAlleLestAvBruker) {
+            oppdaterLestAvBruker(endringsloggId)
+        }
+        return endringslogg
+    }
+
+    @Transactional
+    fun slettEndring(
+        endringsloggId: Long,
+        endringId: Long,
+    ): Endringslogg {
+        log.info { "Sletter endring $endringId fra endringslogg $endringsloggId" }
+
+        val endringslogg = hentEndringslogg(endringsloggId)
+
+        if (endringslogg.endringer.size == 1) ugyldigForespørsel("Kan ikke slette eneste endring i endringslogg $endringsloggId")
+
+        val endring =
+            endringslogg.endringer.find { it.id == endringId }
+                ?: ugyldigForespørsel("Endringslogg endring med id $endringId finnes ikke i endringslogg med id $endringsloggId")
+        endringslogg.endringer.remove(endring)
+        synkroniserRekkefølgeIndeks(endringslogg)
+        return endringslogg
+    }
+
+    private fun synkroniserRekkefølgeIndeks(endringslogg: Endringslogg) {
+        endringslogg.endringer
+            .sortedBy { it.rekkefølgeIndeks }
+            .forEachIndexed { index, endringsloggEndring ->
+                endringsloggEndring.rekkefølgeIndeks = index
+            }
+    }
+
+    @Transactional
+    fun leggTilEndringsloggEndring(
+        endringsloggId: Long,
+        request: LeggTilEndringsloggEndring,
+    ): Endringslogg {
+        log.info { "Legger til endring $request i endringslogg $endringsloggId" }
+
+        val endringslogg = hentEndringslogg(endringsloggId)
+
+        val sisteRekkefølgeIndeks = endringslogg.endringer.size
+        endringslogg.endringer.add(
+            EndringsloggEndring(
+                innhold = request.innhold,
+                tittel = request.tittel,
+                endringslogg = endringslogg,
+                rekkefølgeIndeks = sisteRekkefølgeIndeks + 1,
+            ),
+        )
         return endringslogg
     }
 }
