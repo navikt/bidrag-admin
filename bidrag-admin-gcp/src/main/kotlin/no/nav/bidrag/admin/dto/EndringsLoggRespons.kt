@@ -1,42 +1,83 @@
 package no.nav.bidrag.admin.dto
 
+import io.swagger.v3.oas.annotations.media.Schema
 import no.nav.bidrag.admin.persistence.entity.Endringslogg
+import no.nav.bidrag.admin.persistence.entity.EndringsloggTilhørerSkjermbilde
+import no.nav.bidrag.admin.persistence.entity.Endringstype
 import no.nav.bidrag.commons.security.utils.TokenUtils
 import java.time.LocalDate
 
 data class EndringsLoggDto(
     val id: Long,
+    @Schema(description = "Dato når endringsloggen ble publisert")
     val dato: LocalDate,
+    @Schema(description = "Hvilken system/skjermbilde endringsloggen gjelder for")
+    val gjelder: EndringsloggTilhørerSkjermbilde,
+    @Schema(description = "Tittel på endringsloggen")
     val tittel: String,
+    val endringstyper: List<Endringstype>,
+    @Schema(description = "Sammendrag av endringsloggen I HTML")
     val sammendrag: String,
+    @Schema(
+        description =
+            "Om det er påkrevd å lese endringsloggen. " +
+                "Dette skal føre til at det vises en modal første gang bruker åpner bidrag løsningen",
+    )
     val erPåkrevd: Boolean,
-    val endringer: List<EndringsLoggEndringDto>,
+    @Schema(
+        description =
+            "Om endringsloggen er lest av bruker. Dette vil være sann hvis bruker har lest alle endringene i endringsloggen",
+    )
     val erLestAvBruker: Boolean,
+    @Schema(
+        description =
+            "Om endringsloggen er sett av bruker. Dette vil være sann hvis bruker har sett endringsloggen men ikke har sett alle endringene i endringsloggen",
+    )
+    val erSettAvBruker: Boolean,
+    @Schema(
+        description =
+            "Liste over endringer i endringsloggen. ",
+    )
+    val endringer: List<EndringsLoggEndringDto>,
 )
 
 data class EndringsLoggEndringDto(
+    @Schema(description = "Innhold i endringen I HTML")
     val innhold: String,
     val tittel: String,
     val id: Long,
+    val erLestAvBruker: Boolean,
 )
 
-fun Endringslogg.toDto() =
+fun Endringslogg.toDto(): EndringsLoggDto =
     EndringsLoggDto(
         id = id ?: -1,
         dato = aktivFraTidspunkt ?: opprettetTidspunkt,
         tittel = tittel,
         sammendrag = sammendrag,
+        gjelder = tilhørerSkjermbilde,
         erPåkrevd = erPåkrevd,
+        endringstyper = endringstyper,
+        erLestAvBruker = erAlleLestAvBruker,
         endringer =
             endringer.sortedBy { it.rekkefølgeIndeks }.map {
                 EndringsLoggEndringDto(
                     id = it.id!!,
                     innhold = it.innhold,
                     tittel = it.tittel,
+                    erLestAvBruker =
+                        it.brukerLesinger.any {
+                            it.person.navIdent == TokenUtils.hentSaksbehandlerIdent() || TokenUtils.erApplikasjonsbruker()
+                        },
                 )
             },
-        erLestAvBruker =
-            brukerLesinger.any {
-                it.person.navIdent == TokenUtils.hentSaksbehandlerIdent() || TokenUtils.erApplikasjonsbruker()
-            },
+        erSettAvBruker =
+            endringer.any { e ->
+                e.brukerLesinger.any {
+                    it.person.navIdent == TokenUtils.hentSaksbehandlerIdent() || TokenUtils.erApplikasjonsbruker()
+                }
+            } ||
+                brukerLesinger.any {
+                    it.person.navIdent == TokenUtils.hentSaksbehandlerIdent() || TokenUtils.erApplikasjonsbruker()
+                },
     )

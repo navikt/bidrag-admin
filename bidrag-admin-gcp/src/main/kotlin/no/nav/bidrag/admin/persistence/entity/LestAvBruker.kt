@@ -17,14 +17,17 @@ data class LestAvBruker(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "endringslogg_endring_id", nullable = false)
+    val endringsloggEndring: EndringsloggEndring? = null,
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "endringslogg_id", nullable = false)
     val endringslogg: Endringslogg? = null,
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "driftsmelding_id", nullable = false)
-    val driftsmelding: Driftsmelding? = null,
+    @JoinColumn(name = "driftsmelding_historikk_id", nullable = false)
+    val driftsmeldingHistorikk: DriftsmeldingHistorikk? = null,
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_id", nullable = false)
     val person: Person,
     @Column(name = "lest_tidspunkt")
-    val lestTidspunkt: LocalDateTime = LocalDateTime.now(),
+    var lestTidspunkt: LocalDateTime = LocalDateTime.now(),
 )

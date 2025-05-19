@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
+import no.nav.bidrag.commons.security.utils.TokenUtils
 import java.time.LocalDate
 
 @Entity(name = "endringslogg")
@@ -34,6 +35,8 @@ class Endringslogg(
     var tittel: String,
     var sammendrag: String,
     var erPåkrevd: Boolean = false,
+    @Enumerated(EnumType.STRING)
+    var endringstyper: List<Endringstype> = listOf(Endringstype.ENDRING),
     val opprettetAv: String,
     val opprettetAvNavn: String,
     @OneToMany(
@@ -43,7 +46,35 @@ class Endringslogg(
         fetch = FetchType.EAGER,
     )
     val brukerLesinger: MutableSet<LestAvBruker> = mutableSetOf(),
-)
+) {
+    val erAlleLestAvBruker get() =
+        if (endringer.isEmpty()) {
+            brukerLesinger.any {
+                it.person.navIdent ==
+                    TokenUtils.hentSaksbehandlerIdent()
+            }
+        } else {
+            endringer.all { e ->
+                e.brukerLesinger.any {
+                    it.person.navIdent ==
+                        TokenUtils.hentSaksbehandlerIdent()
+                }
+            }
+        }
+
+    override fun toString(): String =
+        "Endringslogg(id=$id, tittel='$tittel', " +
+            "sammendrag='$sammendrag', opprettetTidspunkt=$opprettetTidspunkt, " +
+            "aktivFraTidspunkt=$aktivFraTidspunkt, aktivTilTidspunkt=$aktivTilTidspunkt, " +
+            "tilhørerSkjermbilde=$tilhørerSkjermbilde, erPåkrevd=$erPåkrevd, erAlleLestAvBruker: $erAlleLestAvBruker)"
+}
+
+@Schema(enumAsRef = true)
+enum class Endringstype {
+    NYHET,
+    ENDRING,
+    FEILFIKS,
+}
 
 @Schema(enumAsRef = true)
 enum class EndringsloggTilhørerSkjermbilde {

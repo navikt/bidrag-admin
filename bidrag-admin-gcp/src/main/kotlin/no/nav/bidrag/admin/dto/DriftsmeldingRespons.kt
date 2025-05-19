@@ -1,25 +1,45 @@
 package no.nav.bidrag.admin.dto
 
 import no.nav.bidrag.admin.persistence.entity.Driftsmelding
+import no.nav.bidrag.admin.persistence.entity.DriftsmeldingStatus
 import no.nav.bidrag.commons.security.utils.TokenUtils
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 data class DriftsmeldingDto(
     val id: Long,
-    val dato: LocalDate,
+    val tidspunkt: LocalDateTime,
     val tittel: String,
+    val historikk: List<DriftsmeldingHistorikkDto>,
+)
+
+data class DriftsmeldingHistorikkDto(
+    val id: Long,
+    val tidspunkt: LocalDateTime,
     val innhold: String,
+    val status: DriftsmeldingStatus,
     val erLestAvBruker: Boolean,
 )
 
 fun Driftsmelding.toDto() =
     DriftsmeldingDto(
         id = id ?: -1,
-        dato = aktivFraTidspunkt ?: opprettetTidspunkt,
+        tidspunkt = aktivFraTidspunkt ?: opprettetTidspunkt,
         tittel = tittel,
-        innhold = innhold,
-        erLestAvBruker =
-            brukerLesinger.any {
-                it.person.navIdent == TokenUtils.hentSaksbehandlerIdent() || TokenUtils.erApplikasjonsbruker()
-            },
+        historikk =
+            historikk
+                .sortedBy { it.aktivFraTidspunkt }
+                .filter {
+                    it.aktivFraTidspunkt != null &&
+                        it.aktivFraTidspunkt!! <= LocalDateTime.now() &&
+                        (it.aktivTilTidspunkt == null || it.aktivTilTidspunkt!! > LocalDateTime.now())
+                }.map {
+                    DriftsmeldingHistorikkDto(
+                        id = it.id ?: -1,
+                        tidspunkt = it.aktivFraTidspunkt ?: it.opprettetTidspunkt,
+                        innhold = it.innhold,
+                        status = it.status,
+                        erLestAvBruker =
+                            it.brukerLesinger.any { lesing -> lesing.person.navIdent == TokenUtils.hentSaksbehandlerIdent() },
+                    )
+                },
     )
