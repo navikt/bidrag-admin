@@ -45,6 +45,7 @@ data class EndringsLoggEndringDto(
     @Schema(description = "Innhold i endringen I HTML")
     val innhold: String,
     val tittel: String,
+    val endringgstype: Endringstype,
     val id: Long,
     val erLestAvBruker: Boolean,
 )
@@ -57,7 +58,7 @@ fun Endringslogg.toDto(): EndringsLoggDto =
         sammendrag = sammendrag,
         gjelder = tilhørerSkjermbilde,
         erPåkrevd = erPåkrevd,
-        endringstyper = endringstyper,
+        endringstyper = endringer.map { it.endringstype },
         erLestAvBruker = erAlleLestAvBruker,
         endringer =
             endringer.sortedBy { it.rekkefølgeIndeks }.map {
@@ -65,6 +66,7 @@ fun Endringslogg.toDto(): EndringsLoggDto =
                     id = it.id!!,
                     innhold = it.innhold,
                     tittel = it.tittel,
+                    endringgstype = it.endringstype,
                     erLestAvBruker =
                         it.brukerLesinger.any {
                             it.person.navIdent == TokenUtils.hentSaksbehandlerIdent() || TokenUtils.erApplikasjonsbruker()

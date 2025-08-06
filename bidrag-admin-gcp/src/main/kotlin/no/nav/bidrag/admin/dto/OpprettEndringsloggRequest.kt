@@ -5,6 +5,7 @@ package no.nav.bidrag.admin.dto
 import no.nav.bidrag.admin.persistence.entity.EndringsloggTilhørerSkjermbilde
 import no.nav.bidrag.admin.persistence.entity.Endringstype
 import java.time.LocalDate
+import kotlin.math.E
 
 data class OppdaterEndringsloggRequest(
     val tittel: String? = null,
@@ -22,6 +23,7 @@ data class OppdaterEndringsloggEndring(
     val id: Long,
     val tittel: String? = null,
     val innhold: String? = null,
+    val endringstype: Endringstype? = null,
 )
 
 data class OpprettEndringsloggRequest(
@@ -32,11 +34,12 @@ data class OpprettEndringsloggRequest(
     val erPåkrevd: Boolean = false,
     val aktivFraTidspunkt: LocalDate? = null,
     val aktivTilTidspunkt: LocalDate? = null,
-    val endringstyper: List<Endringstype>,
+    val endringstyper: List<Endringstype> = emptyList(),
     val endringer: List<LeggTilEndringsloggEndring>? = null,
 )
 
 data class LeggTilEndringsloggEndring(
     val tittel: String,
     val innhold: String,
+    val endringstype: Endringstype = Endringstype.ENDRING,
 )

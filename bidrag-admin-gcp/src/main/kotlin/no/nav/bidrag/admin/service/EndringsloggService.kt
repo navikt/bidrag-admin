@@ -124,7 +124,6 @@ class EndringsloggService(
         endringslogg.erPåkrevd = request.erPåkrevd ?: endringslogg.erPåkrevd
         endringslogg.tittel = request.tittel ?: endringslogg.tittel
         endringslogg.sammendrag = request.sammendrag ?: endringslogg.sammendrag
-        endringslogg.endringstyper = request.endringstyper ?: endringslogg.endringstyper
         val endringerRequestIds = request.endringer?.map { it.id }?.toHashSet()
         if (endringerRequestIds != null && endringerRequestIds.size == endringslogg.endringer.size) {
             val nyeEndringer =
@@ -136,6 +135,7 @@ class EndringsloggService(
                         endring.tittel = endringRequest.tittel ?: endring.tittel
                         endring.innhold = endringRequest.innhold ?: endring.innhold
                         endring.rekkefølgeIndeks = index
+                        endring.endringstype = endringRequest.endringstype ?: endring.endringstype
                         endring
                     }
             endringslogg.endringer.clear()
@@ -175,7 +175,6 @@ class EndringsloggService(
                 aktivTilTidspunkt = request.aktivTilTidspunkt,
                 opprettetAv = hentBrukerIdent(),
                 opprettetAvNavn = hentBrukerNavn(),
-                endringstyper = request.endringstyper,
             )
         request.endringer?.forEachIndexed { index, endringRequest ->
             endringsLogg.endringer.add(
@@ -184,6 +183,7 @@ class EndringsloggService(
                     tittel = endringRequest.tittel,
                     innhold = endringRequest.innhold,
                     rekkefølgeIndeks = index,
+                    endringstype = endringRequest.endringstype,
                 ),
             )
         }
