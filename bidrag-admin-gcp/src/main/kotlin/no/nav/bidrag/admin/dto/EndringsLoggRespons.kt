@@ -45,7 +45,7 @@ data class EndringsLoggEndringDto(
     @Schema(description = "Innhold i endringen I HTML")
     val innhold: String,
     val tittel: String,
-    val endringgstype: Endringstype,
+    val endringstype: Endringstype,
     val id: Long,
     val erLestAvBruker: Boolean,
 )
@@ -66,7 +66,7 @@ fun Endringslogg.toDto(): EndringsLoggDto =
                     id = it.id!!,
                     innhold = it.innhold,
                     tittel = it.tittel,
-                    endringgstype = it.endringstype,
+                    endringstype = it.endringstype,
                     erLestAvBruker =
                         it.brukerLesinger.any {
                             it.person.navIdent == TokenUtils.hentSaksbehandlerIdent() || TokenUtils.erApplikasjonsbruker()
