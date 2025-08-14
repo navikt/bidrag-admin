@@ -11,6 +11,8 @@ data class EndringsLoggDto(
     val id: Long,
     @Schema(description = "Dato når endringsloggen ble publisert")
     val dato: LocalDate,
+    val aktivFra: LocalDate?,
+    val aktivTil: LocalDate?,
     @Schema(description = "Hvilken system/skjermbilde endringsloggen gjelder for")
     val gjelder: EndringsloggTilhørerSkjermbilde,
     @Schema(description = "Tittel på endringsloggen")
@@ -54,6 +56,8 @@ fun Endringslogg.toDto(): EndringsLoggDto =
     EndringsLoggDto(
         id = id ?: -1,
         dato = aktivFraTidspunkt ?: opprettetTidspunkt,
+        aktivFra = aktivFraTidspunkt,
+        aktivTil = aktivTilTidspunkt,
         tittel = tittel,
         sammendrag = sammendrag,
         gjelder = tilhørerSkjermbilde,
