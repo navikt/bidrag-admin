@@ -12,5 +12,10 @@ interface EndringsloggRepository : CrudRepository<Endringslogg, Long> {
             "e.aktivFraTidspunkt is not null and e.aktivFraTidspunkt <= current_date and " +
             "(e.aktivTilTidspunkt is null or e.aktivTilTidspunkt > current_date)",
     )
+    fun findAllAktiveByTilhørerSkjermbilde(type: List<EndringsloggTilhørerSkjermbilde>): List<Endringslogg>
+
+    @Query(
+        "select e from endringslogg e where (:#{#type.isEmpty()} = true or e.tilhørerSkjermbilde in :type)",
+    )
     fun findAllByTilhørerSkjermbilde(type: List<EndringsloggTilhørerSkjermbilde>): List<Endringslogg>
 }

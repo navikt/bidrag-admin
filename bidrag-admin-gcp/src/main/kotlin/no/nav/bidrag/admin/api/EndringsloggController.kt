@@ -7,7 +7,6 @@ import no.nav.bidrag.admin.dto.OpprettEndringsloggRequest
 import no.nav.bidrag.admin.dto.toDto
 import no.nav.bidrag.admin.persistence.entity.EndringsloggTilhørerSkjermbilde
 import no.nav.bidrag.admin.service.EndringsloggService
-import no.nav.security.token.support.core.api.Protected
 import no.nav.security.token.support.core.api.Unprotected
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -32,8 +31,9 @@ class EndringsloggController(
     )
     fun hentAlleEndringslogg(
         @RequestParam(required = false) skjermbilde: List<EndringsloggTilhørerSkjermbilde> = emptyList(),
+        @RequestParam(required = false) bareAktive: Boolean = true,
     ) = endringsloggService
-        .hentAlleForType(skjermbilde)
+        .hentAlleForType(skjermbilde, bareAktive)
         .sortedByDescending { it.aktivFraTidspunkt }
         .map { it.toDto() }
 
