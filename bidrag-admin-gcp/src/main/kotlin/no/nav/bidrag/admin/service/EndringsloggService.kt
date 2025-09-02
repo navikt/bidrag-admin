@@ -136,23 +136,29 @@ class EndringsloggService(
         endringslogg.erPåkrevd = request.erPåkrevd ?: endringslogg.erPåkrevd
         endringslogg.tittel = request.tittel ?: endringslogg.tittel
         endringslogg.sammendrag = request.sammendrag ?: endringslogg.sammendrag
-        val endringerRequestIds = request.endringer?.map { it.id }?.toHashSet()
-        if (endringerRequestIds != null && endringerRequestIds.size == endringslogg.endringer.size) {
+//        val endringerRequestIds = request.endringer?.map { it.id }?.toHashSet()
+//        if (endringerRequestIds != null && endringerRequestIds.size == endringslogg.endringer.size) {
+        if (request.endringer != null) {
             val nyeEndringer =
                 request.endringer
                     .mapIndexed { index, endringRequest ->
-                        val endring =
-                            endringslogg.endringer.find { e -> e.id == endringRequest.id }
-                                ?: ugyldigForespørsel("Endringslogg endring med id ${endringRequest.id} finnes ikke")
-                        endring.tittel = endringRequest.tittel ?: endring.tittel
-                        endring.innhold = endringRequest.innhold ?: endring.innhold
-                        endring.rekkefølgeIndeks = index
-                        endring.endringstype = endringRequest.endringstype ?: endring.endringstype
-                        endring
+                        endringslogg.endringer.find { e -> e.id == endringRequest.id }?.let {
+                            it.tittel = endringRequest.tittel ?: it.tittel
+                            it.innhold = endringRequest.innhold ?: it.innhold
+                            it.rekkefølgeIndeks = index
+                            it.endringstype = endringRequest.endringstype ?: it.endringstype
+                            it
+                        } ?: EndringsloggEndring(
+                            innhold = endringRequest.innhold ?: "",
+                            tittel = endringRequest.tittel ?: "",
+                            endringslogg = endringslogg,
+                            rekkefølgeIndeks = index,
+                        )
                     }
             endringslogg.endringer.clear()
             endringslogg.endringer.addAll(nyeEndringer)
         }
+//        }
         return endringslogg
     }
 
