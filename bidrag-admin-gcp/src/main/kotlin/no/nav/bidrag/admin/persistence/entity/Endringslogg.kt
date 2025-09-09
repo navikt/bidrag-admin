@@ -35,6 +35,8 @@ class Endringslogg(
     var tittel: String,
     var sammendrag: String,
     var erPåkrevd: Boolean = false,
+    @Enumerated(EnumType.STRING)
+    var endringstyper: List<Endringstype> = listOf(Endringstype.ENDRING),
     val opprettetAv: String,
     val opprettetAvNavn: String,
     @OneToMany(
