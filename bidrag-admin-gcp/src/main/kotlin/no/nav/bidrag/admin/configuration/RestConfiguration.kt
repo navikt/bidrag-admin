@@ -7,6 +7,9 @@ import com.fasterxml.jackson.datatype.jsr310.deser.YearMonthDeserializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import no.nav.bidrag.commons.security.api.EnableSecurityConfiguration
+import no.nav.bidrag.commons.web.CorrelationIdFilter
+import no.nav.bidrag.commons.web.DefaultCorsFilter
+import no.nav.bidrag.commons.web.UserMdcFilter
 import no.nav.bidrag.commons.web.config.RestOperationsAzure
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -20,7 +23,12 @@ import java.time.format.DateTimeFormatter
 
 @Configuration
 @EnableSecurityConfiguration
-@Import(RestOperationsAzure::class)
+@Import(
+    RestOperationsAzure::class,
+    CorrelationIdFilter::class,
+    DefaultCorsFilter::class,
+    UserMdcFilter::class,
+)
 class RestConfiguration {
     @Bean
     fun clientRequestObservationConvention(): ClientRequestObservationConvention = DefaultClientRequestObservationConvention()

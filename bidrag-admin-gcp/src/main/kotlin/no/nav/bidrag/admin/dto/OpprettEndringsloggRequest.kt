@@ -5,7 +5,6 @@ package no.nav.bidrag.admin.dto
 import no.nav.bidrag.admin.persistence.entity.EndringsloggTilhørerSkjermbilde
 import no.nav.bidrag.admin.persistence.entity.Endringstype
 import java.time.LocalDate
-import kotlin.math.E
 
 data class OppdaterEndringsloggRequest(
     val tittel: String? = null,
