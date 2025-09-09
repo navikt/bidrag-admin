@@ -7,6 +7,7 @@ import no.nav.bidrag.admin.dto.OpprettEndringsloggRequest
 import no.nav.bidrag.admin.persistence.entity.Endringslogg
 import no.nav.bidrag.admin.persistence.entity.EndringsloggEndring
 import no.nav.bidrag.admin.persistence.entity.EndringsloggTilhørerSkjermbilde
+import no.nav.bidrag.admin.persistence.entity.Endringstype
 import no.nav.bidrag.admin.persistence.entity.LestAvBruker
 import no.nav.bidrag.admin.persistence.entity.Person
 import no.nav.bidrag.admin.persistence.repository.EndringsloggRepository
@@ -152,6 +153,7 @@ class EndringsloggService(
                             innhold = endringRequest.innhold ?: "",
                             tittel = endringRequest.tittel ?: "",
                             endringslogg = endringslogg,
+                            endringstype = endringRequest.endringstype ?: Endringstype.ENDRING,
                             rekkefølgeIndeks = index,
                         )
                     }
