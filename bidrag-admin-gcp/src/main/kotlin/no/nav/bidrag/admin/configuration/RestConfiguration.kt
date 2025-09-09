@@ -23,12 +23,7 @@ import java.time.format.DateTimeFormatter
 
 @Configuration
 @EnableSecurityConfiguration
-@Import(
-    RestOperationsAzure::class,
-    CorrelationIdFilter::class,
-    DefaultCorsFilter::class,
-    UserMdcFilter::class,
-)
+@Import(RestOperationsAzure::class)
 class RestConfiguration {
     @Bean
     fun clientRequestObservationConvention(): ClientRequestObservationConvention = DefaultClientRequestObservationConvention()
