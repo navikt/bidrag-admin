@@ -61,18 +61,14 @@ class EndringsloggService(
 
     @Transactional
     fun hentAlleForType(
-        type: List<EndringsloggTilhørerSkjermbilde>,
+        type: EndringsloggTilhørerSkjermbilde?,
         bareAktive: Boolean,
     ): List<Endringslogg> {
         val endringer =
             if (bareAktive) {
-                endringsloggRepository.findAllAktiveByTilhørerSkjermbilde(
-                    type.flatMap {
-                        it.tilTyper
-                    },
-                )
+                endringsloggRepository.findAllAktiveByTilhørerSkjermbilde(type.tilTyper)
             } else {
-                endringsloggRepository.findAllByTilhørerSkjermbilde(type.flatMap { it.tilTyper })
+                endringsloggRepository.findAllByTilhørerSkjermbilde(type.tilTyper)
             }
         log.info { "Hentet endringslogg for type $type: $endringer" }
         return endringer

@@ -31,7 +31,7 @@ class EndringsloggController(
         security = [SecurityRequirement(name = "bearer-key")],
     )
     fun hentAlleEndringslogg(
-        @RequestParam(required = false) skjermbilde: List<EndringsloggTilhørerSkjermbilde> = emptyList(),
+        @RequestParam(required = false) skjermbilde: EndringsloggTilhørerSkjermbilde?,
         @RequestParam(required = false) bareAktive: Boolean = true,
     ) = endringsloggService
         .hentAlleForType(skjermbilde, bareAktive)
