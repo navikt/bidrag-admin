@@ -7,6 +7,7 @@ import no.nav.bidrag.admin.dto.OpprettEndringsloggRequest
 import no.nav.bidrag.admin.persistence.entity.Endringslogg
 import no.nav.bidrag.admin.persistence.entity.EndringsloggEndring
 import no.nav.bidrag.admin.persistence.entity.EndringsloggTilhørerSkjermbilde
+import no.nav.bidrag.admin.persistence.entity.Endringstype
 import no.nav.bidrag.admin.persistence.entity.LestAvBruker
 import no.nav.bidrag.admin.persistence.entity.Person
 import no.nav.bidrag.admin.persistence.repository.EndringsloggRepository
@@ -59,8 +60,16 @@ class EndringsloggService(
             }
 
     @Transactional
-    fun hentAlleForType(type: List<EndringsloggTilhørerSkjermbilde>): List<Endringslogg> {
-        val endringer = endringsloggRepository.findAllByTilhørerSkjermbilde(type.flatMap { it.tilTyper })
+    fun hentAlleForType(
+        type: EndringsloggTilhørerSkjermbilde?,
+        bareAktive: Boolean,
+    ): List<Endringslogg> {
+        val endringer =
+            if (bareAktive) {
+                endringsloggRepository.findAllAktiveByTilhørerSkjermbilde(type.tilTyper)
+            } else {
+                endringsloggRepository.findAllByTilhørerSkjermbilde(type.tilTyper)
+            }
         log.info { "Hentet endringslogg for type $type: $endringer" }
         return endringer
     }
@@ -124,23 +133,30 @@ class EndringsloggService(
         endringslogg.erPåkrevd = request.erPåkrevd ?: endringslogg.erPåkrevd
         endringslogg.tittel = request.tittel ?: endringslogg.tittel
         endringslogg.sammendrag = request.sammendrag ?: endringslogg.sammendrag
-        endringslogg.endringstyper = request.endringstyper ?: endringslogg.endringstyper
-        val endringerRequestIds = request.endringer?.map { it.id }?.toHashSet()
-        if (endringerRequestIds != null && endringerRequestIds.size == endringslogg.endringer.size) {
+//        val endringerRequestIds = request.endringer?.map { it.id }?.toHashSet()
+//        if (endringerRequestIds != null && endringerRequestIds.size == endringslogg.endringer.size) {
+        if (request.endringer != null) {
             val nyeEndringer =
                 request.endringer
                     .mapIndexed { index, endringRequest ->
-                        val endring =
-                            endringslogg.endringer.find { e -> e.id == endringRequest.id }
-                                ?: ugyldigForespørsel("Endringslogg endring med id ${endringRequest.id} finnes ikke")
-                        endring.tittel = endringRequest.tittel ?: endring.tittel
-                        endring.innhold = endringRequest.innhold ?: endring.innhold
-                        endring.rekkefølgeIndeks = index
-                        endring
+                        endringslogg.endringer.find { e -> e.id == endringRequest.id }?.let {
+                            it.tittel = endringRequest.tittel ?: it.tittel
+                            it.innhold = endringRequest.innhold ?: it.innhold
+                            it.rekkefølgeIndeks = index
+                            it.endringstype = endringRequest.endringstype ?: it.endringstype
+                            it
+                        } ?: EndringsloggEndring(
+                            innhold = endringRequest.innhold ?: "",
+                            tittel = endringRequest.tittel ?: "",
+                            endringslogg = endringslogg,
+                            endringstype = endringRequest.endringstype ?: Endringstype.ENDRING,
+                            rekkefølgeIndeks = index,
+                        )
                     }
             endringslogg.endringer.clear()
             endringslogg.endringer.addAll(nyeEndringer)
         }
+//        }
         return endringslogg
     }
 
@@ -175,7 +191,6 @@ class EndringsloggService(
                 aktivTilTidspunkt = request.aktivTilTidspunkt,
                 opprettetAv = hentBrukerIdent(),
                 opprettetAvNavn = hentBrukerNavn(),
-                endringstyper = request.endringstyper,
             )
         request.endringer?.forEachIndexed { index, endringRequest ->
             endringsLogg.endringer.add(
@@ -184,6 +199,7 @@ class EndringsloggService(
                     tittel = endringRequest.tittel,
                     innhold = endringRequest.innhold,
                     rekkefølgeIndeks = index,
+                    endringstype = endringRequest.endringstype,
                 ),
             )
         }

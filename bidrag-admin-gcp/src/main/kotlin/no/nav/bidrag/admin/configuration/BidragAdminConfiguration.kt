@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme
 import no.nav.bidrag.commons.service.organisasjon.EnableSaksbehandlernavnProvider
 import no.nav.bidrag.commons.web.DefaultCorsFilter
 import no.nav.bidrag.commons.web.MdcFilter
+import no.nav.bidrag.commons.web.UserMdcFilter
 import no.nav.security.token.support.client.spring.oauth2.EnableOAuth2Client
 import no.nav.security.token.support.spring.api.EnableJwtTokenValidation
 import org.slf4j.MDC
@@ -32,7 +33,7 @@ import org.springframework.context.annotation.Scope
 @EnableJwtTokenValidation
 @EnableOAuth2Client(cacheEnabled = true)
 @EnableSaksbehandlernavnProvider
-@Import(DefaultCorsFilter::class, MdcFilter::class)
+@Import(DefaultCorsFilter::class, MdcFilter::class, UserMdcFilter::class)
 class BidragAutomatiskJobbConfiguration {
     @Bean
     fun unleashConfig(

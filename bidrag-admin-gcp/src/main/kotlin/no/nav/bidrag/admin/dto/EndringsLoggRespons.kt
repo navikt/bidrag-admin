@@ -11,6 +11,9 @@ data class EndringsLoggDto(
     val id: Long,
     @Schema(description = "Dato når endringsloggen ble publisert")
     val dato: LocalDate,
+    val opprettetTidspunkt: LocalDate,
+    val aktivFra: LocalDate?,
+    val aktivTil: LocalDate?,
     @Schema(description = "Hvilken system/skjermbilde endringsloggen gjelder for")
     val gjelder: EndringsloggTilhørerSkjermbilde,
     @Schema(description = "Tittel på endringsloggen")
@@ -45,6 +48,7 @@ data class EndringsLoggEndringDto(
     @Schema(description = "Innhold i endringen I HTML")
     val innhold: String,
     val tittel: String,
+    val endringstype: Endringstype,
     val id: Long,
     val erLestAvBruker: Boolean,
 )
@@ -53,11 +57,14 @@ fun Endringslogg.toDto(): EndringsLoggDto =
     EndringsLoggDto(
         id = id ?: -1,
         dato = aktivFraTidspunkt ?: opprettetTidspunkt,
+        opprettetTidspunkt = opprettetTidspunkt,
+        aktivFra = aktivFraTidspunkt,
+        aktivTil = aktivTilTidspunkt,
         tittel = tittel,
         sammendrag = sammendrag,
         gjelder = tilhørerSkjermbilde,
         erPåkrevd = erPåkrevd,
-        endringstyper = endringstyper,
+        endringstyper = endringer.map { it.endringstype },
         erLestAvBruker = erAlleLestAvBruker,
         endringer =
             endringer.sortedBy { it.rekkefølgeIndeks }.map {
@@ -65,6 +72,7 @@ fun Endringslogg.toDto(): EndringsLoggDto =
                     id = it.id!!,
                     innhold = it.innhold,
                     tittel = it.tittel,
+                    endringstype = it.endringstype,
                     erLestAvBruker =
                         it.brukerLesinger.any {
                             it.person.navIdent == TokenUtils.hentSaksbehandlerIdent() || TokenUtils.erApplikasjonsbruker()

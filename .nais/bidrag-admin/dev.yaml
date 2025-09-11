@@ -35,3 +35,6 @@ azure_access_inbound:
   - application: bidrag-ui-feature
     namespace: bidrag
     cluster: dev-fss
+  - application: azure-token-generator
+    namespace: nais
+    cluster: dev-gcp

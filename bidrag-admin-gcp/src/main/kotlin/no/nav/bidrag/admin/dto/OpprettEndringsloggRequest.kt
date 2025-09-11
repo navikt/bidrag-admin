@@ -22,6 +22,7 @@ data class OppdaterEndringsloggEndring(
     val id: Long,
     val tittel: String? = null,
     val innhold: String? = null,
+    val endringstype: Endringstype? = null,
 )
 
 data class OpprettEndringsloggRequest(
@@ -32,11 +33,12 @@ data class OpprettEndringsloggRequest(
     val erPåkrevd: Boolean = false,
     val aktivFraTidspunkt: LocalDate? = null,
     val aktivTilTidspunkt: LocalDate? = null,
-    val endringstyper: List<Endringstype>,
+    val endringstyper: List<Endringstype> = emptyList(),
     val endringer: List<LeggTilEndringsloggEndring>? = null,
 )
 
 data class LeggTilEndringsloggEndring(
     val tittel: String,
     val innhold: String,
+    val endringstype: Endringstype = Endringstype.ENDRING,
 )
