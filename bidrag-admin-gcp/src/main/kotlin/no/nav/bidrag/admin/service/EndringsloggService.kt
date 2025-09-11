@@ -4,6 +4,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import no.nav.bidrag.admin.dto.LeggTilEndringsloggEndring
 import no.nav.bidrag.admin.dto.OppdaterEndringsloggRequest
 import no.nav.bidrag.admin.dto.OpprettEndringsloggRequest
+import no.nav.bidrag.admin.persistence.entity.AktivForMiljø
 import no.nav.bidrag.admin.persistence.entity.Endringslogg
 import no.nav.bidrag.admin.persistence.entity.EndringsloggEndring
 import no.nav.bidrag.admin.persistence.entity.EndringsloggTilhørerSkjermbilde
@@ -66,7 +67,8 @@ class EndringsloggService(
     ): List<Endringslogg> {
         val endringer =
             if (bareAktive) {
-                endringsloggRepository.findAllAktiveByTilhørerSkjermbilde(type.tilTyper)
+                val miljø = if (TokenUtils.erProd()) AktivForMiljø.PROD else AktivForMiljø.DEV
+                endringsloggRepository.findAllAktiveByTilhørerSkjermbilde(type.tilTyper.map { it.name }, miljø.name)
             } else {
                 endringsloggRepository.findAllByTilhørerSkjermbilde(type.tilTyper)
             }
@@ -161,21 +163,29 @@ class EndringsloggService(
     }
 
     @Transactional
-    fun aktiverEndringslogg(endringsloggId: Long): Endringslogg {
+    fun aktiverEndringslogg(
+        endringsloggId: Long,
+        environment: AktivForMiljø,
+    ): Endringslogg {
         log.info { "Aktiverer enddringslogg $endringsloggId" }
         val endringslogg = hentEndringslogg(endringsloggId)
 
         endringslogg.aktivFraTidspunkt = LocalDate.now()
         endringslogg.aktivTilTidspunkt = null
+        endringslogg.aktivForMiljø = (endringslogg.aktivForMiljø + setOf(environment)).toSet()
         return endringslogg
     }
 
     @Transactional
-    fun deaktiverEndringslogg(endringsloggId: Long): Endringslogg {
+    fun deaktiverEndringslogg(
+        endringsloggId: Long,
+        environment: AktivForMiljø,
+    ): Endringslogg {
         log.info { "Deaktiverer enddringslogg $endringsloggId" }
         val endringslogg = hentEndringslogg(endringsloggId)
 
         endringslogg.aktivTilTidspunkt = LocalDate.now()
+        endringslogg.aktivForMiljø = endringslogg.aktivForMiljø.filter { it.name != environment.name }.toSet()
         return endringslogg
     }
 

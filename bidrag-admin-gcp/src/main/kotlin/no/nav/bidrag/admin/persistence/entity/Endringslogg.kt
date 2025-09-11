@@ -3,6 +3,7 @@ package no.nav.bidrag.admin.persistence.entity
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
+import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -28,6 +29,8 @@ class Endringslogg(
     )
     open var endringer: MutableSet<EndringsloggEndring> = mutableSetOf(),
     open var opprettetTidspunkt: LocalDate = LocalDate.now(),
+    @Enumerated(EnumType.STRING)
+    open var aktivForMiljø: Set<AktivForMiljø> = mutableSetOf(),
     open var aktivFraTidspunkt: LocalDate? = null,
     open var aktivTilTidspunkt: LocalDate? = null,
     @Enumerated(EnumType.STRING)
@@ -85,4 +88,10 @@ enum class EndringsloggTilhørerSkjermbilde {
     FORSENDELSE,
     INNSYN_DOKUMENT,
     SAMHANDLER,
+}
+
+@Schema(enumAsRef = true)
+enum class AktivForMiljø {
+    PROD,
+    DEV,
 }
