@@ -6,7 +6,6 @@ import no.nav.bidrag.admin.dto.LeggTilEndringsloggEndring
 import no.nav.bidrag.admin.dto.toDto
 import no.nav.bidrag.admin.service.EndringsloggService
 import no.nav.security.token.support.core.api.Protected
-import no.nav.security.token.support.core.api.Unprotected
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
