@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import no.nav.bidrag.admin.dto.OppdaterEndringsloggRequest
 import no.nav.bidrag.admin.dto.OpprettEndringsloggRequest
 import no.nav.bidrag.admin.dto.toDto
+import no.nav.bidrag.admin.persistence.entity.AktivForMiljø
 import no.nav.bidrag.admin.persistence.entity.EndringsloggTilhørerSkjermbilde
 import no.nav.bidrag.admin.service.EndringsloggService
 import no.nav.security.token.support.core.api.Protected
@@ -81,7 +82,8 @@ class EndringsloggController(
     )
     fun deaktiverEndringslogg(
         @PathVariable endringsloggId: Long,
-    ) = endringsloggService.deaktiverEndringslogg(endringsloggId).toDto()
+        @RequestParam(required = false) environment: AktivForMiljø = AktivForMiljø.DEV,
+    ) = endringsloggService.deaktiverEndringslogg(endringsloggId, environment).toDto()
 
     @PatchMapping("/{endringsloggId}/aktiver")
     @Operation(
@@ -90,5 +92,6 @@ class EndringsloggController(
     )
     fun aktiverEndringslogg(
         @PathVariable endringsloggId: Long,
-    ) = endringsloggService.aktiverEndringslogg(endringsloggId).toDto()
+        @RequestParam(required = false) environment: AktivForMiljø = AktivForMiljø.DEV,
+    ) = endringsloggService.aktiverEndringslogg(endringsloggId, environment).toDto()
 }
