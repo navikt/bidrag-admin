@@ -9,6 +9,7 @@ import no.nav.bidrag.admin.persistence.entity.AktivForMiljø
 import no.nav.bidrag.admin.persistence.entity.EndringsloggTilhørerSkjermbilde
 import no.nav.bidrag.admin.service.EndringsloggService
 import no.nav.security.token.support.core.api.Protected
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -46,6 +47,15 @@ class EndringsloggController(
     fun hentEndringslogg(
         @PathVariable endringsloggId: Long,
     ) = endringsloggService.hentEndringslogg(endringsloggId).toDto()
+
+    @DeleteMapping("/{endringsloggId}")
+    @Operation(
+        summary = "Hent en enkel endringslogg med id",
+        security = [SecurityRequirement(name = "bearer-key")],
+    )
+    fun slettEndringslogg(
+        @PathVariable endringsloggId: Long,
+    ) = endringsloggService.slettEndringslogg(endringsloggId)
 
     @PostMapping("/{endringsloggId}/lest")
     @Operation(

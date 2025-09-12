@@ -76,6 +76,12 @@ class EndringsloggService(
         return endringer
     }
 
+    fun slettEndringslogg(endringsloggId: Long) =
+        endringsloggRepository
+            .deleteById(
+                endringsloggId,
+            )
+
     fun hentEndringslogg(endringsloggId: Long): Endringslogg =
         endringsloggRepository
             .findById(
