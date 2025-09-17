@@ -23,6 +23,7 @@ spec:
     application:
       enabled: true
       allowAllUsers: true
+      tenant: nav.no
       claims:
         extra:
           - "NAVident"
