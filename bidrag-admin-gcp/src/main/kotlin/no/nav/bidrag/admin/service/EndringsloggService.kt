@@ -68,7 +68,7 @@ class EndringsloggService(
         val endringer =
             if (bareAktive) {
                 val miljø = if (TokenUtils.erProd()) AktivForMiljø.PROD else AktivForMiljø.DEV
-                endringsloggRepository.findAllAktiveByTilhørerSkjermbilde(type.tilTyper.map { it.name }, miljø.name)
+                endringsloggRepository.findAllAktiveByTilhørerSkjermbilde(type.tilTyper.joinToString(",") { it.name }, miljø.name)
             } else {
                 endringsloggRepository.findAllByTilhørerSkjermbilde(type.tilTyper)
             }

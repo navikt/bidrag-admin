@@ -11,8 +11,8 @@ interface EndringsloggRepository : CrudRepository<Endringslogg, Long> {
         nativeQuery = true,
         value = """
         select * from endringslogg e
-        where 
-            (:typeIsEmpty = true or e.tilhører_skjermbilde = any(:type)) and
+        where
+        (:typeIsEmpty = true or e.tilhører_skjermbilde = any(string_to_array(:type, ','))) and
             e.aktiv_fra_tidspunkt is not null and
             e.aktiv_fra_tidspunkt <= current_date and
             (e.aktiv_til_tidspunkt is null or e.aktiv_til_tidspunkt > current_date) and
@@ -20,7 +20,7 @@ interface EndringsloggRepository : CrudRepository<Endringslogg, Long> {
     """,
     )
     fun findAllAktiveByTilhørerSkjermbilde(
-        @Param("type") type: List<String>,
+        @Param("type") type: String,
         @Param("env") env: String,
         @Param("typeIsEmpty") typeIsEmpty: Boolean = type.isEmpty(),
     ): List<Endringslogg>
