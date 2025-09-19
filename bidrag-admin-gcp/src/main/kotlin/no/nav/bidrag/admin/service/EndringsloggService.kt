@@ -67,8 +67,7 @@ class EndringsloggService(
     ): List<Endringslogg> {
         val endringer =
             if (bareAktive) {
-                val miljø = if (TokenUtils.erProd()) AktivForMiljø.PROD else AktivForMiljø.DEV
-                endringsloggRepository.findAllAktiveByTilhørerSkjermbilde(type.tilTyper.map { it.name }, miljø.name)
+                endringsloggRepository.findAllAktiveByTilhørerSkjermbilde(type.tilTyper)
             } else {
                 endringsloggRepository.findAllByTilhørerSkjermbilde(type.tilTyper)
             }
@@ -169,29 +168,21 @@ class EndringsloggService(
     }
 
     @Transactional
-    fun aktiverEndringslogg(
-        endringsloggId: Long,
-        environment: AktivForMiljø,
-    ): Endringslogg {
+    fun aktiverEndringslogg(endringsloggId: Long): Endringslogg {
         log.info { "Aktiverer enddringslogg $endringsloggId" }
         val endringslogg = hentEndringslogg(endringsloggId)
 
         endringslogg.aktivFraTidspunkt = LocalDate.now()
         endringslogg.aktivTilTidspunkt = null
-        endringslogg.aktivForMiljø = (endringslogg.aktivForMiljø + setOf(environment)).toSet()
         return endringslogg
     }
 
     @Transactional
-    fun deaktiverEndringslogg(
-        endringsloggId: Long,
-        environment: AktivForMiljø,
-    ): Endringslogg {
+    fun deaktiverEndringslogg(endringsloggId: Long): Endringslogg {
         log.info { "Deaktiverer enddringslogg $endringsloggId" }
         val endringslogg = hentEndringslogg(endringsloggId)
 
         endringslogg.aktivTilTidspunkt = LocalDate.now()
-        endringslogg.aktivForMiljø = endringslogg.aktivForMiljø.filter { it.name != environment.name }.toSet()
         return endringslogg
     }
 
