@@ -15,7 +15,6 @@ data class EndringsLoggDto(
     val opprettetTidspunkt: LocalDate,
     val aktivFra: LocalDate?,
     val aktivTil: LocalDate?,
-    val aktiveMiljøer: List<AktivForMiljø> = emptyList(),
     @Schema(description = "Hvilken system/skjermbilde endringsloggen gjelder for")
     val gjelder: EndringsloggTilhørerSkjermbilde,
     @Schema(description = "Tittel på endringsloggen")
@@ -62,7 +61,6 @@ fun Endringslogg.toDto(): EndringsLoggDto =
         opprettetTidspunkt = opprettetTidspunkt,
         aktivFra = aktivFraTidspunkt,
         aktivTil = aktivTilTidspunkt,
-        aktiveMiljøer = aktivForMiljø.toList(),
         tittel = tittel,
         sammendrag = sammendrag,
         gjelder = tilhørerSkjermbilde,

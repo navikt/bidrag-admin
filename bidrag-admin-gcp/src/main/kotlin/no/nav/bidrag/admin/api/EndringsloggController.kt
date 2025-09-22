@@ -92,8 +92,7 @@ class EndringsloggController(
     )
     fun deaktiverEndringslogg(
         @PathVariable endringsloggId: Long,
-        @RequestParam(required = false) environment: AktivForMiljø = AktivForMiljø.DEV,
-    ) = endringsloggService.deaktiverEndringslogg(endringsloggId, environment).toDto()
+    ) = endringsloggService.deaktiverEndringslogg(endringsloggId).toDto()
 
     @PatchMapping("/{endringsloggId}/aktiver")
     @Operation(
@@ -102,6 +101,5 @@ class EndringsloggController(
     )
     fun aktiverEndringslogg(
         @PathVariable endringsloggId: Long,
-        @RequestParam(required = false) environment: AktivForMiljø = AktivForMiljø.DEV,
-    ) = endringsloggService.aktiverEndringslogg(endringsloggId, environment).toDto()
+    ) = endringsloggService.aktiverEndringslogg(endringsloggId).toDto()
 }
