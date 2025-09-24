@@ -39,7 +39,6 @@ class EndringsloggController(
         .hentAlleForType(skjermbilde, bareAktive)
         .sortedByDescending { it.aktivFraTidspunkt }
         .map { it.toDto() }
-        .sorterEtterDato()
 
     @GetMapping("/{endringsloggId}")
     @Operation(

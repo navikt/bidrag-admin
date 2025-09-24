@@ -9,14 +9,18 @@ import org.springframework.data.repository.query.Param
 interface EndringsloggRepository : CrudRepository<Endringslogg, Long> {
     @Query(
         "select e from endringslogg e where " +
-            "(:#{#type.isEmpty()} = true or e.tilhørerSkjermbilde in :type) and " +
-            "e.aktivFraTidspunkt is not null and e.aktivFraTidspunkt <= current_date and " +
-            "(e.aktivTilTidspunkt is null or e.aktivTilTidspunkt > current_date)",
+            "(:#{#type.isEmpty()} = true or e.tilhørerSkjermbilde IN (:type)) and " +
+            "e.aktivFraTidspunkt is not null and e.aktivFraTidspunkt <= current_timestamp and " +
+            "(e.aktivTilTidspunkt is null or e.aktivTilTidspunkt > current_timestamp)",
     )
-    fun findAllAktiveByTilhørerSkjermbilde(type: List<EndringsloggTilhørerSkjermbilde>): List<Endringslogg>
+    fun findAllAktiveByTilhørerSkjermbilde(
+        @Param("type") type: List<EndringsloggTilhørerSkjermbilde>,
+    ): List<Endringslogg>
 
     @Query(
         "select e from endringslogg e where (:#{#type.isEmpty()} = true or e.tilhørerSkjermbilde in :type)",
     )
-    fun findAllByTilhørerSkjermbilde(type: List<EndringsloggTilhørerSkjermbilde>): List<Endringslogg>
+    fun findAllByTilhørerSkjermbilde(
+        @Param("type") type: List<EndringsloggTilhørerSkjermbilde>,
+    ): List<Endringslogg>
 }
