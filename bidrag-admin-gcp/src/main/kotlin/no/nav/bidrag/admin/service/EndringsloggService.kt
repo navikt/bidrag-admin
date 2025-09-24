@@ -135,8 +135,6 @@ class EndringsloggService(
         log.info { "Oppdaterer endringslogg $endringsloggId med $request" }
         val endringslogg = hentEndringslogg(endringsloggId)
 
-        endringslogg.aktivFraTidspunkt = request.aktivFraTidspunkt ?: endringslogg.aktivFraTidspunkt
-        endringslogg.aktivTilTidspunkt = request.aktivTilTidspunkt ?: endringslogg.aktivTilTidspunkt
         endringslogg.erPåkrevd = request.erPåkrevd ?: endringslogg.erPåkrevd
         endringslogg.tittel = request.tittel ?: endringslogg.tittel
         endringslogg.sammendrag = request.sammendrag ?: endringslogg.sammendrag
@@ -172,7 +170,7 @@ class EndringsloggService(
         log.info { "Aktiverer enddringslogg $endringsloggId" }
         val endringslogg = hentEndringslogg(endringsloggId)
 
-        endringslogg.aktivFraTidspunkt = LocalDate.now()
+        endringslogg.aktivFraTidspunkt = LocalDateTime.now()
         endringslogg.aktivTilTidspunkt = null
         return endringslogg
     }
@@ -182,7 +180,7 @@ class EndringsloggService(
         log.info { "Deaktiverer enddringslogg $endringsloggId" }
         val endringslogg = hentEndringslogg(endringsloggId)
 
-        endringslogg.aktivTilTidspunkt = LocalDate.now()
+        endringslogg.aktivTilTidspunkt = LocalDateTime.now()
         return endringslogg
     }
 
@@ -194,8 +192,6 @@ class EndringsloggService(
                 tilhørerSkjermbilde = request.tilhørerSkjermbilde,
                 sammendrag = request.sammendrag,
                 erPåkrevd = request.erPåkrevd,
-                aktivFraTidspunkt = request.aktivFraTidspunkt,
-                aktivTilTidspunkt = request.aktivTilTidspunkt,
                 opprettetAv = hentBrukerIdent(),
                 opprettetAvNavn = hentBrukerNavn(),
             )

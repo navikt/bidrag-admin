@@ -12,11 +12,11 @@ import java.time.LocalDateTime
 data class EndringsLoggDto(
     val id: Long,
     @Schema(description = "Dato når endringsloggen ble publisert")
-    val dato: LocalDate,
-    val opprettetTidspunkt: LocalDate,
+    val dato: LocalDateTime,
+    val opprettetTidspunkt: LocalDateTime,
     val aktiv: Boolean,
-    val aktivFra: LocalDate?,
-    val aktivTil: LocalDate?,
+    val aktivFra: LocalDateTime?,
+    val aktivTil: LocalDateTime?,
     @Schema(description = "Hvilken system/skjermbilde endringsloggen gjelder for")
     val gjelder: EndringsloggTilhørerSkjermbilde,
     val aktiveMiljøer: List<AktivForMiljø> = emptyList(),
@@ -63,8 +63,8 @@ fun Endringslogg.toDto(): EndringsLoggDto =
         dato = aktivFraTidspunkt ?: opprettetTidspunkt,
         opprettetTidspunkt = opprettetTidspunkt,
         aktiv =
-            aktivFraTidspunkt != null && aktivFraTidspunkt!! <= LocalDate.now() &&
-                (aktivTilTidspunkt == null || aktivTilTidspunkt!! > LocalDate.now()),
+            aktivFraTidspunkt != null && aktivFraTidspunkt!! <= LocalDateTime.now() &&
+                (aktivTilTidspunkt == null || aktivTilTidspunkt!! > LocalDateTime.now()),
         aktivFra = aktivFraTidspunkt,
         aktivTil = aktivTilTidspunkt,
         aktiveMiljøer = aktivForMiljø.toList(),
