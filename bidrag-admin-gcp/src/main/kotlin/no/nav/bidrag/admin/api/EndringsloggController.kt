@@ -8,6 +8,7 @@ import no.nav.bidrag.admin.dto.toDto
 import no.nav.bidrag.admin.persistence.entity.AktivForMiljø
 import no.nav.bidrag.admin.persistence.entity.EndringsloggTilhørerSkjermbilde
 import no.nav.bidrag.admin.service.EndringsloggService
+import no.nav.bidrag.admin.utils.sorterEtterDato
 import no.nav.security.token.support.core.api.Protected
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping

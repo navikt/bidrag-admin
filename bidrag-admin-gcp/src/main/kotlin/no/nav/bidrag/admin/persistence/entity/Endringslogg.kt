@@ -13,6 +13,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
 import no.nav.bidrag.commons.security.utils.TokenUtils
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Entity(name = "endringslogg")
 class Endringslogg(
@@ -27,11 +28,11 @@ class Endringslogg(
         orphanRemoval = true,
     )
     open var endringer: MutableSet<EndringsloggEndring> = mutableSetOf(),
-    open var opprettetTidspunkt: LocalDate = LocalDate.now(),
+    open var opprettetTidspunkt: LocalDateTime = LocalDateTime.now(),
     @Enumerated(EnumType.STRING)
     open var aktivForMiljø: Set<AktivForMiljø> = mutableSetOf(),
-    open var aktivFraTidspunkt: LocalDate? = null,
-    open var aktivTilTidspunkt: LocalDate? = null,
+    open var aktivFraTidspunkt: LocalDateTime? = null,
+    open var aktivTilTidspunkt: LocalDateTime? = null,
     @Enumerated(EnumType.STRING)
     open var tilhørerSkjermbilde: EndringsloggTilhørerSkjermbilde,
     var tittel: String,
