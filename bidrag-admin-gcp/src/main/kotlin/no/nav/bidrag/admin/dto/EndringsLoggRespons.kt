@@ -7,16 +7,19 @@ import no.nav.bidrag.admin.persistence.entity.EndringsloggTilhørerSkjermbilde
 import no.nav.bidrag.admin.persistence.entity.Endringstype
 import no.nav.bidrag.commons.security.utils.TokenUtils
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 data class EndringsLoggDto(
     val id: Long,
     @Schema(description = "Dato når endringsloggen ble publisert")
     val dato: LocalDate,
     val opprettetTidspunkt: LocalDate,
+    val aktiv: Boolean,
     val aktivFra: LocalDate?,
     val aktivTil: LocalDate?,
     @Schema(description = "Hvilken system/skjermbilde endringsloggen gjelder for")
     val gjelder: EndringsloggTilhørerSkjermbilde,
+    val aktiveMiljøer: List<AktivForMiljø> = emptyList(),
     @Schema(description = "Tittel på endringsloggen")
     val tittel: String,
     val endringstyper: List<Endringstype>,
@@ -59,8 +62,12 @@ fun Endringslogg.toDto(): EndringsLoggDto =
         id = id ?: -1,
         dato = aktivFraTidspunkt ?: opprettetTidspunkt,
         opprettetTidspunkt = opprettetTidspunkt,
+        aktiv =
+            aktivFraTidspunkt != null && aktivFraTidspunkt!! <= LocalDate.now() &&
+                (aktivTilTidspunkt == null || aktivTilTidspunkt!! > LocalDate.now()),
         aktivFra = aktivFraTidspunkt,
         aktivTil = aktivTilTidspunkt,
+        aktiveMiljøer = aktivForMiljø.toList(),
         tittel = tittel,
         sammendrag = sammendrag,
         gjelder = tilhørerSkjermbilde,
