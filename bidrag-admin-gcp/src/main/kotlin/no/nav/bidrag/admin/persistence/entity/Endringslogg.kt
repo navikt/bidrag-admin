@@ -88,6 +88,7 @@ enum class EndringsloggTilhørerSkjermbilde {
     FORSENDELSE,
     INNSYN_DOKUMENT,
     SAMHANDLER,
+    ALLE,
 }
 
 @Schema(enumAsRef = true)

@@ -40,24 +40,28 @@ class EndringsloggService(
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_FORSKUDD,
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_SÆRBIDRAG,
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE,
+                        EndringsloggTilhørerSkjermbilde.ALLE,
                     )
                 EndringsloggTilhørerSkjermbilde.BEHANDLING_SÆRBIDRAG ->
                     listOf(
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_SÆRBIDRAG,
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE,
+                        EndringsloggTilhørerSkjermbilde.ALLE,
                     )
                 EndringsloggTilhørerSkjermbilde.BEHANDLING_FORSKUDD ->
                     listOf(
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_FORSKUDD,
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE,
+                        EndringsloggTilhørerSkjermbilde.ALLE,
                     )
                 EndringsloggTilhørerSkjermbilde.BEHANDLING_BIDRAG ->
                     listOf(
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_BIDRAG,
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE,
+                        EndringsloggTilhørerSkjermbilde.ALLE,
                     )
-                null -> emptyList()
-                else -> listOf(this)
+                null, EndringsloggTilhørerSkjermbilde.ALLE -> emptyList()
+                else -> listOf(this, EndringsloggTilhørerSkjermbilde.ALLE)
             }
 
     @Transactional
@@ -135,11 +139,10 @@ class EndringsloggService(
         log.info { "Oppdaterer endringslogg $endringsloggId med $request" }
         val endringslogg = hentEndringslogg(endringsloggId)
 
+        endringslogg.tilhørerSkjermbilde = request.tilhørerSkjermbilde ?: endringslogg.tilhørerSkjermbilde
         endringslogg.erPåkrevd = request.erPåkrevd ?: endringslogg.erPåkrevd
         endringslogg.tittel = request.tittel ?: endringslogg.tittel
         endringslogg.sammendrag = request.sammendrag ?: endringslogg.sammendrag
-//        val endringerRequestIds = request.endringer?.map { it.id }?.toHashSet()
-//        if (endringerRequestIds != null && endringerRequestIds.size == endringslogg.endringer.size) {
         if (request.endringer != null) {
             val nyeEndringer =
                 request.endringer
