@@ -60,7 +60,7 @@ class EndringsloggService(
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE,
                         EndringsloggTilhørerSkjermbilde.ALLE,
                     )
-                null -> emptyList()
+                null, EndringsloggTilhørerSkjermbilde.ALLE -> emptyList()
                 else -> listOf(this, EndringsloggTilhørerSkjermbilde.ALLE)
             }
 
