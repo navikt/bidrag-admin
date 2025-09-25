@@ -61,7 +61,7 @@ class EndringsloggService(
                         EndringsloggTilhørerSkjermbilde.ALLE,
                     )
                 null -> emptyList()
-                else -> listOf(this)
+                else -> listOf(this, EndringsloggTilhørerSkjermbilde.ALLE)
             }
 
     @Transactional
