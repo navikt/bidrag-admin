@@ -40,23 +40,27 @@ class EndringsloggService(
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_FORSKUDD,
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_SÆRBIDRAG,
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE,
+                        EndringsloggTilhørerSkjermbilde.ALLE,
                     )
                 EndringsloggTilhørerSkjermbilde.BEHANDLING_SÆRBIDRAG ->
                     listOf(
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_SÆRBIDRAG,
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE,
+                        EndringsloggTilhørerSkjermbilde.ALLE,
                     )
                 EndringsloggTilhørerSkjermbilde.BEHANDLING_FORSKUDD ->
                     listOf(
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_FORSKUDD,
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE,
+                        EndringsloggTilhørerSkjermbilde.ALLE,
                     )
                 EndringsloggTilhørerSkjermbilde.BEHANDLING_BIDRAG ->
                     listOf(
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_BIDRAG,
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE,
+                        EndringsloggTilhørerSkjermbilde.ALLE,
                     )
-                null -> emptyList()
+                null -> listOf(EndringsloggTilhørerSkjermbilde.ALLE)
                 else -> listOf(this)
             }
 
