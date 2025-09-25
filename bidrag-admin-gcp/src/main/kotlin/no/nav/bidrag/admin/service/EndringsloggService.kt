@@ -139,11 +139,10 @@ class EndringsloggService(
         log.info { "Oppdaterer endringslogg $endringsloggId med $request" }
         val endringslogg = hentEndringslogg(endringsloggId)
 
+        endringslogg.tilhørerSkjermbilde = request.tilhørerSkjermbilde ?: endringslogg.tilhørerSkjermbilde
         endringslogg.erPåkrevd = request.erPåkrevd ?: endringslogg.erPåkrevd
         endringslogg.tittel = request.tittel ?: endringslogg.tittel
         endringslogg.sammendrag = request.sammendrag ?: endringslogg.sammendrag
-//        val endringerRequestIds = request.endringer?.map { it.id }?.toHashSet()
-//        if (endringerRequestIds != null && endringerRequestIds.size == endringslogg.endringer.size) {
         if (request.endringer != null) {
             val nyeEndringer =
                 request.endringer
