@@ -2,13 +2,12 @@ package no.nav.bidrag.admin.api
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import no.nav.bidrag.admin.dto.LestAvBrukerRequest
 import no.nav.bidrag.admin.dto.OppdaterEndringsloggRequest
 import no.nav.bidrag.admin.dto.OpprettEndringsloggRequest
 import no.nav.bidrag.admin.dto.toDto
-import no.nav.bidrag.admin.persistence.entity.AktivForMiljø
 import no.nav.bidrag.admin.persistence.entity.EndringsloggTilhørerSkjermbilde
 import no.nav.bidrag.admin.service.EndringsloggService
-import no.nav.bidrag.admin.utils.sorterEtterDato
 import no.nav.security.token.support.core.api.Protected
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -65,7 +64,8 @@ class EndringsloggController(
     )
     fun oppdaterLestAvBrukerEndringslogg(
         @PathVariable endringsloggId: Long,
-    ) = endringsloggService.oppdaterLestAvBruker(endringsloggId).toDto()
+        @RequestBody request: LestAvBrukerRequest,
+    ) = endringsloggService.oppdaterLestAvBruker(endringsloggId, request).toDto()
 
     @PostMapping
     @Operation(

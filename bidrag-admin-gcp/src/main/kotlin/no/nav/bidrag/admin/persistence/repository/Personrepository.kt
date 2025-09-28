@@ -5,4 +5,6 @@ import org.springframework.data.repository.CrudRepository
 
 interface Personrepository : CrudRepository<Person, Long> {
     fun findByNavIdent(navIdent: String): Person?
+
+    fun enhet(enhet: String): MutableList<Person>
 }

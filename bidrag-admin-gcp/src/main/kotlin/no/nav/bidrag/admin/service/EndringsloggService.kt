@@ -2,9 +2,9 @@ package no.nav.bidrag.admin.service
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import no.nav.bidrag.admin.dto.LeggTilEndringsloggEndring
+import no.nav.bidrag.admin.dto.LestAvBrukerRequest
 import no.nav.bidrag.admin.dto.OppdaterEndringsloggRequest
 import no.nav.bidrag.admin.dto.OpprettEndringsloggRequest
-import no.nav.bidrag.admin.persistence.entity.AktivForMiljø
 import no.nav.bidrag.admin.persistence.entity.Endringslogg
 import no.nav.bidrag.admin.persistence.entity.EndringsloggEndring
 import no.nav.bidrag.admin.persistence.entity.EndringsloggTilhørerSkjermbilde
@@ -20,7 +20,6 @@ import no.nav.bidrag.admin.utils.ugyldigForespørsel
 import no.nav.bidrag.commons.security.utils.TokenUtils
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 private val log = KotlinLogging.logger {}
@@ -91,7 +90,10 @@ class EndringsloggService(
                 endringsloggId,
             ).orElseThrow { ugyldigForespørsel("Endringslogg med id $endringsloggId finnes ikke") }
 
-    fun oppdaterLestAvBruker(endringsloggId: Long): Endringslogg {
+    fun oppdaterLestAvBruker(
+        endringsloggId: Long,
+        request: LestAvBrukerRequest,
+    ): Endringslogg {
         log.info {
             "Oppdaterer lest av bruker for endringslogg $endringsloggId og saksbehandler ${TokenUtils.hentSaksbehandlerIdent()}"
         }
@@ -101,26 +103,30 @@ class EndringsloggService(
                 ?: run {
                     personrepository.save(
                         Person(
+                            enhet = request.enhet,
                             navIdent = TokenUtils.hentSaksbehandlerIdent()!!,
                             navn = TokenUtils.hentBruker() ?: "",
                         ),
                     )
                 }
-        val lestAvBruker =
-            lestAvBrukerRepository
-                .findByPersonAndEndringslogg(person, endringslogg)
-                ?: run {
-                    val lestAvBrukerNy =
-                        LestAvBruker(
-                            person = person,
-                            endringslogg = endringslogg,
-                        )
-                    endringslogg.brukerLesinger.add(lestAvBrukerRepository.save(lestAvBrukerNy))
-                    endringsloggRepository.save(endringslogg)
-                    lestAvBrukerNy
-                }
+        val eksisterendeLestAvBruker = lestAvBrukerRepository.findByPersonAndEndringsloggAndEndringsloggEndringIsNull(person, endringslogg)
 
-        lestAvBruker.lestTidspunkt = LocalDateTime.now()
+        if (eksisterendeLestAvBruker != null) {
+            log.info { "Bruker har allerede lest endringslogg $endringsloggId" }
+            return endringslogg
+        } else {
+            val totalVarighet = lestAvBrukerRepository.sumLesetidVarighetMsByEndringslogg(endringslogg) ?: 0
+            val lestAvBrukerNy =
+                LestAvBruker(
+                    person = person,
+                    endringslogg = endringslogg,
+                    lestetidVarighetMs = totalVarighet,
+                )
+            endringslogg.brukerLesinger.add(lestAvBrukerRepository.save(lestAvBrukerNy))
+            lestAvBrukerNy.lestTidspunkt = LocalDateTime.now()
+            endringsloggRepository.save(endringslogg)
+            lestAvBrukerNy
+        }
         log.info {
             "Oppdaterte lest av bruker for endringslogg $endringsloggId og saksbehandler ${TokenUtils.hentSaksbehandlerIdent()}"
         }
@@ -218,6 +224,7 @@ class EndringsloggService(
     fun oppdaterLestAvBrukerEndring(
         endringsloggId: Long,
         endringsloggEndringId: Long,
+        request: LestAvBrukerRequest,
     ): Endringslogg {
         log.info {
             "Oppdaterer lest av bruker for endringslogg endring $endringsloggEndringId i endringslogg $endringsloggId og saksbehandler ${TokenUtils.hentSaksbehandlerIdent()}"
@@ -228,6 +235,7 @@ class EndringsloggService(
                 ?: run {
                     personrepository.save(
                         Person(
+                            enhet = request.enhet,
                             navIdent = TokenUtils.hentSaksbehandlerIdent()!!,
                             navn = TokenUtils.hentBruker() ?: "",
                         ),
@@ -235,27 +243,29 @@ class EndringsloggService(
                 }
 
         val endringsloggEndring = endringslogg.hentEndring(endringsloggEndringId)
-        val lestAvBruker =
-            lestAvBrukerRepository
-                .findByPersonAndEndringsloggEndring(person, endringsloggEndring)
-                ?: run {
-                    val lestAvBrukerNy =
-                        LestAvBruker(
-                            person = person,
-                            endringsloggEndring = endringsloggEndring,
-                        )
-                    endringsloggEndring.brukerLesinger.add(lestAvBrukerRepository.save(lestAvBrukerNy))
-                    endringsloggRepository.save(endringslogg)
-                    lestAvBrukerNy
-                }
-
-        lestAvBruker.lestTidspunkt = LocalDateTime.now()
-        log.info {
-            "Oppdaterte lest av bruker for endringslogg endring ${endringsloggEndring.id} i endringslogg $endringsloggId og saksbehandler ${TokenUtils.hentSaksbehandlerIdent()}"
+        val eksisterendLestAvBruker = lestAvBrukerRepository.findByPersonAndEndringsloggEndring(person, endringsloggEndring)
+        if (eksisterendLestAvBruker != null) {
+            log.info { "Bruker har allerede lest endringslogg endring $endringsloggEndringId i endring $endringsloggId" }
+            eksisterendLestAvBruker.lestetidVarighetMs = maxOf(eksisterendLestAvBruker.lestetidVarighetMs ?: 0, request.lesetidVarighetMs)
+            endringslogg
+        } else {
+            val lestAvBrukerNy =
+                LestAvBruker(
+                    person = person,
+                    endringsloggEndring = endringsloggEndring,
+                    endringslogg = endringslogg,
+                    lestetidVarighetMs = request.lesetidVarighetMs,
+                )
+            endringsloggEndring.brukerLesinger.add(lestAvBrukerRepository.save(lestAvBrukerNy))
+            lestAvBrukerNy.lestTidspunkt = LocalDateTime.now()
+            endringsloggRepository.save(endringslogg)
+            log.info {
+                "Oppdaterte lest av bruker for endringslogg endring ${endringsloggEndring.id} i endringslogg $endringsloggId og saksbehandler ${TokenUtils.hentSaksbehandlerIdent()}"
+            }
         }
 
         if (endringslogg.erAlleLestAvBruker) {
-            oppdaterLestAvBruker(endringsloggId)
+            oppdaterLestAvBruker(endringsloggId, request)
         }
         return endringslogg
     }
