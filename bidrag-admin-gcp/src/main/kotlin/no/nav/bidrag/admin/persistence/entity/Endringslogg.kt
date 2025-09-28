@@ -42,7 +42,7 @@ class Endringslogg(
     var endringstyper: List<Endringstype> = listOf(Endringstype.ENDRING),
     val opprettetAv: String,
     val opprettetAvNavn: String,
-    @SQLRestriction(value = "endringslogg_endring_id = null")
+    @SQLRestriction(value = "endringslogg_endring_id is null")
     @OneToMany(
         mappedBy = "endringslogg",
         cascade = [CascadeType.ALL],
