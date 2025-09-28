@@ -13,4 +13,5 @@ data class Person(
     var id: Long? = null,
     val navIdent: String,
     val navn: String,
+    val enhet: String? = null,
 )

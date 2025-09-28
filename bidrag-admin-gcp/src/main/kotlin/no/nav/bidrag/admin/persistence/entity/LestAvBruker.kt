@@ -30,4 +30,6 @@ data class LestAvBruker(
     val person: Person,
     @Column(name = "lest_tidspunkt")
     var lestTidspunkt: LocalDateTime = LocalDateTime.now(),
+    @Column(name = "lestetid_varighet_ms")
+    var lestetidVarighetMs: Long? = null,
 )

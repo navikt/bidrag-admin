@@ -12,7 +12,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
 import no.nav.bidrag.commons.security.utils.TokenUtils
-import java.time.LocalDate
+import org.hibernate.annotations.SQLRestriction
 import java.time.LocalDateTime
 
 @Entity(name = "endringslogg")
@@ -42,6 +42,7 @@ class Endringslogg(
     var endringstyper: List<Endringstype> = listOf(Endringstype.ENDRING),
     val opprettetAv: String,
     val opprettetAvNavn: String,
+    @SQLRestriction(value = "endringslogg_endring_id = null")
     @OneToMany(
         mappedBy = "endringslogg",
         cascade = [CascadeType.ALL],
