@@ -12,6 +12,6 @@ data class Person(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
     val navIdent: String,
-    val navn: String,
+    var navn: String,
     val enhet: String? = null,
 )

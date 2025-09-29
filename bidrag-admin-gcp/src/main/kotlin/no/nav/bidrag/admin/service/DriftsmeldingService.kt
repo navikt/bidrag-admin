@@ -15,6 +15,7 @@ import no.nav.bidrag.admin.utils.hentBrukerIdent
 import no.nav.bidrag.admin.utils.hentBrukerNavn
 import no.nav.bidrag.admin.utils.ugyldigForespørsel
 import no.nav.bidrag.commons.security.utils.TokenUtils
+import no.nav.bidrag.commons.service.organisasjon.SaksbehandlernavnProvider
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -80,17 +81,18 @@ class DriftsmeldingService(
     ) {
         val driftsmelding = hentDriftsmelding(driftsmeldingId)
         val drifsmeldingHistorikk = driftsmelding.hentDriftsmeldingHistorikk(driftsmeldingHistorikkId)
+        val saksbehandlerIdent = TokenUtils.hentSaksbehandlerIdent()!!
         val person =
-            personrepository.findByNavIdent(TokenUtils.hentSaksbehandlerIdent()!!)
+            personrepository.findByNavIdent(saksbehandlerIdent)
                 ?: run {
                     personrepository.save(
                         Person(
-                            navIdent = TokenUtils.hentSaksbehandlerIdent()!!,
-                            navn = TokenUtils.hentBruker() ?: "",
+                            navIdent = saksbehandlerIdent,
+                            navn = SaksbehandlernavnProvider.hentSaksbehandlernavn(saksbehandlerIdent) ?: "",
                         ),
                     )
                 }
-
+        person.navn = SaksbehandlernavnProvider.hentSaksbehandlernavn(saksbehandlerIdent) ?: person.navn
         val lestAvBruker = lestAvBrukerRepository.findByPersonAndDriftsmeldingHistorikk(person, drifsmeldingHistorikk)
         if (lestAvBruker == null) {
             val lestAvBrukerNy =
