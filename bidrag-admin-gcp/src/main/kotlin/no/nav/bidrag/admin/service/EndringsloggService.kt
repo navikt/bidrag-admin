@@ -118,7 +118,7 @@ class EndringsloggService(
             log.info { "Bruker har allerede lest endringslogg $endringsloggId" }
             return endringslogg
         } else {
-            val totalVarighet = lestAvBrukerRepository.sumLesetidVarighetMsByEndringslogg(endringslogg) ?: 0
+            val totalVarighet = lestAvBrukerRepository.sumLesetidVarighetMsByEndringslogg(endringslogg, person.id!!) ?: 0
             val lestAvBrukerNy =
                 LestAvBruker(
                     person = person,

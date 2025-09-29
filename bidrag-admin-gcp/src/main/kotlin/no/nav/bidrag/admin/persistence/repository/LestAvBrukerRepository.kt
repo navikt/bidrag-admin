@@ -28,9 +28,10 @@ interface LestAvBrukerRepository : CrudRepository<LestAvBruker, Long> {
     @Query(
         "select sum(l.lestetidVarighetMs) " +
             "from lest_av_bruker l " +
-            "where l.endringslogg = :endringslogg",
+            "where l.endringslogg = :endringslogg and l.person.id = :personId",
     )
     fun sumLesetidVarighetMsByEndringslogg(
         @Param("endringslogg") endringslogg: Endringslogg,
+        @Param("personId") personId: Long,
     ): Long?
 }
