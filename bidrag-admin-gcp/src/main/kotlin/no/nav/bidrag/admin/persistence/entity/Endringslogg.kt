@@ -22,7 +22,7 @@ class Endringslogg(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
     @OneToMany(
-        fetch = FetchType.EAGER,
+        fetch = FetchType.LAZY,
         mappedBy = "endringslogg",
         cascade = [CascadeType.ALL],
         orphanRemoval = true,
@@ -47,7 +47,7 @@ class Endringslogg(
         mappedBy = "endringslogg",
         cascade = [CascadeType.ALL],
         orphanRemoval = true,
-        fetch = FetchType.EAGER,
+        fetch = FetchType.LAZY,
     )
     val brukerLesinger: MutableSet<LestAvBruker> = mutableSetOf(),
 ) {
