@@ -2,6 +2,7 @@ package no.nav.bidrag.admin.api
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import no.nav.bidrag.admin.dto.EndringsLoggDto
 import no.nav.bidrag.admin.dto.LeggTilEndringsloggEndring
 import no.nav.bidrag.admin.dto.LestAvBrukerRequest
 import no.nav.bidrag.admin.dto.toDto
@@ -29,7 +30,10 @@ class EndringsloggEndringController(
         @PathVariable endringsloggId: Long,
         @PathVariable endringId: Long,
         @RequestBody request: LestAvBrukerRequest,
-    ) = endringsloggService.oppdaterLestAvBrukerEndring(endringsloggId, endringId, request).toDto()
+    ): EndringsLoggDto {
+        endringsloggService.oppdaterLestAvBrukerEndring(endringsloggId, endringId, request)
+        return endringsloggService.hentEndringslogg(endringsloggId).toDto()
+    }
 
     @DeleteMapping("/{endringsloggId}/endring/{endringId}")
     @Operation(

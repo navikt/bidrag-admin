@@ -22,7 +22,7 @@ class Endringslogg(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
     @OneToMany(
-        fetch = FetchType.LAZY,
+        fetch = FetchType.EAGER,
         mappedBy = "endringslogg",
         cascade = [CascadeType.ALL],
         orphanRemoval = true,
@@ -42,14 +42,15 @@ class Endringslogg(
     var endringstyper: List<Endringstype> = listOf(Endringstype.ENDRING),
     val opprettetAv: String,
     val opprettetAvNavn: String,
-    @SQLRestriction(value = "endringslogg_endring_id is null")
-    @OneToMany(
-        mappedBy = "endringslogg",
-        cascade = [CascadeType.ALL],
-        orphanRemoval = true,
-        fetch = FetchType.LAZY,
-    )
-    val brukerLesinger: MutableSet<LestAvBruker> = mutableSetOf(),
+//    @SQLRestriction(value = "endringslogg_endring_id is null")
+//    @OneToMany(
+//        mappedBy = "endringslogg",
+//        cascade = [CascadeType.ALL],
+//        orphanRemoval = true,
+//        fetch = FetchType.LAZY,
+//    )
+    @Transient
+    var brukerLesinger: MutableSet<LestAvBruker> = mutableSetOf(),
 ) {
     val erAlleLestAvBruker get() =
         if (endringer.isEmpty()) {

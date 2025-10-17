@@ -29,13 +29,14 @@ class EndringsloggEndring(
     @Enumerated(EnumType.STRING)
     var endringstype: Endringstype = Endringstype.ENDRING,
     open var opprettetTidspunkt: LocalDate = LocalDate.now(),
-    @OneToMany(
-        mappedBy = "endringsloggEndring",
-        cascade = [CascadeType.ALL],
-        orphanRemoval = true,
-        fetch = FetchType.EAGER,
-    )
-    val brukerLesinger: MutableSet<LestAvBruker> = mutableSetOf(),
+//    @OneToMany(
+//        mappedBy = "endringsloggEndring",
+//        cascade = [CascadeType.ALL],
+//        orphanRemoval = true,
+//        fetch = FetchType.EAGER,
+//    )
+    @Transient
+    var brukerLesinger: MutableSet<LestAvBruker> = mutableSetOf(),
 ) {
     override fun toString(): String =
         "EndringsloggEndring(id=$id, innhold='$innhold', tittel='$tittel', rekkefølgeIndeks=$rekkefølgeIndeks)"
