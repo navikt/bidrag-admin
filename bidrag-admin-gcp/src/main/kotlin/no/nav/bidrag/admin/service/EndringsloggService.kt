@@ -76,6 +76,9 @@ class EndringsloggService(
                 endringsloggRepository.findAllByTilhørerSkjermbilde(type.tilTyper)
             }
         log.info { "Hentet endringslogg for type $type: $endringer" }
+        endringer.forEach {
+            oppdaterLestAvEndringslogg(it)
+        }
         return endringer
     }
 
@@ -91,6 +94,11 @@ class EndringsloggService(
                 .findById(
                     endringsloggId,
                 ).orElseThrow { ugyldigForespørsel("Endringslogg med id $endringsloggId finnes ikke") }
+        oppdaterLestAvEndringslogg(endringslogg)
+        return endringslogg
+    }
+
+    private fun oppdaterLestAvEndringslogg(endringslogg: Endringslogg) {
         val innloggetPerson = hentPerson()
         endringslogg.brukerLesinger = mutableSetOf()
         lestAvBrukerRepository.findByPersonAndEndringsloggAndEndringsloggEndringIsNull(innloggetPerson, endringslogg)?.let {
@@ -102,7 +110,6 @@ class EndringsloggService(
                 it.brukerLesinger.add(lestAvBruker)
             }
         }
-        return endringslogg
     }
 
     fun hentPerson(enhet: String? = null): Person {
