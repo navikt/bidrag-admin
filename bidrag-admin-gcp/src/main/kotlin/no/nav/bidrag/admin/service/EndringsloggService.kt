@@ -19,6 +19,7 @@ import no.nav.bidrag.admin.utils.hentBrukerNavn
 import no.nav.bidrag.admin.utils.ugyldigForespørsel
 import no.nav.bidrag.commons.security.utils.TokenUtils
 import no.nav.bidrag.commons.service.organisasjon.SaksbehandlernavnProvider
+import no.nav.bidrag.commons.util.secureLogger
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -75,10 +76,10 @@ class EndringsloggService(
             } else {
                 endringsloggRepository.findAllByTilhørerSkjermbilde(type.tilTyper)
             }
-        log.info { "Hentet endringslogg for type $type: $endringer" }
         endringer.forEach {
             oppdaterLestAvEndringslogg(it)
         }
+        secureLogger.info { "Hentet endringslogg for type $type: $endringer" }
         return endringer
     }
 
