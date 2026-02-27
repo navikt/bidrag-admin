@@ -18,7 +18,6 @@ spec:
       destinations:
         - id: loki
         - id: elastic
-        - id: secure_logs
   azure:
     application:
       enabled: true
@@ -46,8 +45,6 @@ spec:
         {{/each}}
             - application: logging
               namespace: nais-system
-  secureLogs:
-    enabled: true
   kafka:
     pool: {{ kafka.pool }}
   image: {{ image }}
