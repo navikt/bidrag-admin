@@ -8,7 +8,7 @@ import org.apache.hc.client5.http.ssl.NoopHostnameVerifier
 import org.apache.hc.core5.ssl.SSLContexts
 import org.apache.hc.core5.ssl.TrustStrategy
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.web.client.RestTemplateBuilder
+import org.springframework.boot.restclient.RestTemplateBuilder
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
