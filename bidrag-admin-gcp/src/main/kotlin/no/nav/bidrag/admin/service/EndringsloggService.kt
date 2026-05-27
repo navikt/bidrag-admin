@@ -35,7 +35,7 @@ class EndringsloggService(
     val EndringsloggTilhørerSkjermbilde?.tilTyper
         get() =
             when (this) {
-                EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE ->
+                EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE -> {
                     listOf(
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_BIDRAG,
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_FORSKUDD,
@@ -43,26 +43,39 @@ class EndringsloggService(
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE,
                         EndringsloggTilhørerSkjermbilde.ALLE,
                     )
-                EndringsloggTilhørerSkjermbilde.BEHANDLING_SÆRBIDRAG ->
+                }
+
+                EndringsloggTilhørerSkjermbilde.BEHANDLING_SÆRBIDRAG -> {
                     listOf(
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_SÆRBIDRAG,
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE,
                         EndringsloggTilhørerSkjermbilde.ALLE,
                     )
-                EndringsloggTilhørerSkjermbilde.BEHANDLING_FORSKUDD ->
+                }
+
+                EndringsloggTilhørerSkjermbilde.BEHANDLING_FORSKUDD -> {
                     listOf(
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_FORSKUDD,
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE,
                         EndringsloggTilhørerSkjermbilde.ALLE,
                     )
-                EndringsloggTilhørerSkjermbilde.BEHANDLING_BIDRAG ->
+                }
+
+                EndringsloggTilhørerSkjermbilde.BEHANDLING_BIDRAG -> {
                     listOf(
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_BIDRAG,
                         EndringsloggTilhørerSkjermbilde.BEHANDLING_ALLE,
                         EndringsloggTilhørerSkjermbilde.ALLE,
                     )
-                null, EndringsloggTilhørerSkjermbilde.ALLE -> emptyList()
-                else -> listOf(this, EndringsloggTilhørerSkjermbilde.ALLE)
+                }
+
+                null, EndringsloggTilhørerSkjermbilde.ALLE -> {
+                    emptyList()
+                }
+
+                else -> {
+                    listOf(this, EndringsloggTilhørerSkjermbilde.ALLE)
+                }
             }
 
     @Transactional
