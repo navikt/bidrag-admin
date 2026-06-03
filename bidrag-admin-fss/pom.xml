@@ -86,7 +86,13 @@
       <version>${nav-token-support.version}</version>
     </dependency>
 
-    <!-- Kodegenerering -->
+    <!-- db2 -->
+    <dependency>
+      <groupId>com.ibm.db2</groupId>
+      <artifactId>db2jcc4</artifactId>
+      <version>${db2.db2jcc4.version}</version>
+    </dependency>
+
     <!-- Logging -->
     <dependency>
       <groupId>io.github.oshai</groupId>

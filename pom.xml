@@ -33,6 +33,8 @@
     <spring-cloud-contract-wiremock.version>5.0.2</spring-cloud-contract-wiremock.version>
     <springdoc-openapi-ui.version>3.0.3</springdoc-openapi-ui.version>
     <logback-encoder.version>9.0</logback-encoder.version>
+    <db2.db2jcc_license_cu.version>9.7</db2.db2jcc_license_cu.version>
+    <db2.db2jcc4.version>10.5fp6</db2.db2jcc4.version>
   </properties>
 
   <dependencies>
