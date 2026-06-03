@@ -17,11 +17,10 @@ spring:
   application:
     name: "bidrag-admin-fss"
   datasource:
-    bisys:
-      url: jdbc:db2://${DB_HOST}:${DB_PORT}/${DB_NAME}:currentSchema=${BISYS_DB_SCHEMA};
-      username: ${BISYS_DB_USERNAME}
-      password: ${BISYS_DB_PASSWORD}
-      driver-class-name: com.ibm.db2.jcc.DB2Driver
+    url: jdbc:db2://${DB_HOST}:${DB_PORT}/${DB_NAME}:currentSchema=${BISYS_DB_SCHEMA};
+    username: ${BISYS_DB_USERNAME}
+    password: ${BISYS_DB_PASSWORD}
+    driver-class-name: com.ibm.db2.jcc.DB2Driver
 
 no.nav.security.jwt:
   issuer.aad:
