@@ -13,4 +13,4 @@ EXPOSE 8080
 ENV LANG=nb_NO.UTF-8 LANGUAGE='nb_NO:nb' LC_ALL=nb_NO.UTF-8 TZ="Europe/Oslo"
 ENV SPRING_PROFILES_ACTIVE=nais
 
-ENTRYPOINT ["/bin/sh", "-c", "exec java ${JAVA_PROXY_OPTIONS:-$JDK_JAVA_OPTIONS} -Dloader.path=/var/run/secrets/db2license -cp app.jar org.springframework.boot.loader.launch.PropertiesLauncher"]
+ENTRYPOINT ["/bin/sh", "-c", "exec java ${JAVA_PROXY_OPTIONS:-$JDK_JAVA_OPTIONS} -cp app.jar:/var/run/secrets/db2license/db2jcc_license_cisuz.jar org.springframework.boot.loader.launch.JarLauncher"]
