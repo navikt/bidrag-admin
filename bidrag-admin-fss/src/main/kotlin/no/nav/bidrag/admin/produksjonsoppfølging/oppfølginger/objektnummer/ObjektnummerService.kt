@@ -1,11 +1,11 @@
 package no.nav.bidrag.admin.produksjonsoppfølging.oppfølginger.objektnummer
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import no.nav.bidrag.produksjonsoppfølging.domene.Rolle
-import no.nav.bidrag.produksjonsoppfølging.jira.JiraService
-import no.nav.bidrag.produksjonsoppfølging.oppfølginger.Oppfølging
-import no.nav.bidrag.produksjonsoppfølging.repository.RolleRepository
-import no.nav.bidrag.produksjonsoppfølging.utils.Entities
+import no.nav.bidrag.admin.produksjonsoppfølging.domene.Rolle
+import no.nav.bidrag.admin.produksjonsoppfølging.jira.JiraService
+import no.nav.bidrag.admin.produksjonsoppfølging.oppfølginger.Oppfølging
+import no.nav.bidrag.admin.produksjonsoppfølging.repository.RolleRepository
+import no.nav.bidrag.admin.produksjonsoppfølging.utils.Entities
 import org.springframework.stereotype.Service
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream

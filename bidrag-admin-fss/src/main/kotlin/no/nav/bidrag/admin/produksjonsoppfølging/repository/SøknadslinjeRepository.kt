@@ -1,6 +1,6 @@
 package no.nav.bidrag.admin.produksjonsoppfølging.repository
 
-import no.nav.bidrag.produksjonsoppfølging.domene.Søknadslinje
+import no.nav.bidrag.admin.produksjonsoppfølging.domene.Søknadslinje
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 

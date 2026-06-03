@@ -1,16 +1,16 @@
 package no.nav.bidrag.admin.produksjonsoppfølging.oppfølginger.duplikatroller
 
 import io.github.oshai.kotlinlogging.KotlinLogging
-import no.nav.bidrag.produksjonsoppfølging.domene.Beløp
-import no.nav.bidrag.produksjonsoppfølging.domene.Rolle
-import no.nav.bidrag.produksjonsoppfølging.domene.Sak
-import no.nav.bidrag.produksjonsoppfølging.domene.Søknadslinje
-import no.nav.bidrag.produksjonsoppfølging.jira.JiraService
-import no.nav.bidrag.produksjonsoppfølging.oppfølginger.Oppfølging
-import no.nav.bidrag.produksjonsoppfølging.repository.BeløpRepository
-import no.nav.bidrag.produksjonsoppfølging.repository.RolleRepository
-import no.nav.bidrag.produksjonsoppfølging.repository.SøknadslinjeRepository
-import no.nav.bidrag.produksjonsoppfølging.utils.Entities
+import no.nav.bidrag.admin.produksjonsoppfølging.domene.Beløp
+import no.nav.bidrag.admin.produksjonsoppfølging.domene.Rolle
+import no.nav.bidrag.admin.produksjonsoppfølging.domene.Sak
+import no.nav.bidrag.admin.produksjonsoppfølging.domene.Søknadslinje
+import no.nav.bidrag.admin.produksjonsoppfølging.jira.JiraService
+import no.nav.bidrag.admin.produksjonsoppfølging.oppfølginger.Oppfølging
+import no.nav.bidrag.admin.produksjonsoppfølging.repository.BeløpRepository
+import no.nav.bidrag.admin.produksjonsoppfølging.repository.RolleRepository
+import no.nav.bidrag.admin.produksjonsoppfølging.repository.SøknadslinjeRepository
+import no.nav.bidrag.admin.produksjonsoppfølging.utils.Entities
 import org.springframework.stereotype.Service
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream

@@ -1,6 +1,6 @@
 package no.nav.bidrag.admin.produksjonsoppfølging.oppfølginger.objektnummer
 
-import no.nav.bidrag.produksjonsoppfølging.domene.Rolle
+import no.nav.bidrag.admin.produksjonsoppfølging.domene.Rolle
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 

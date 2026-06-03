@@ -45,18 +45,42 @@ class JiraService(
         beskrivelse: String,
         assignee: String?,
     ): String {
-        val request = _root_ide_package_.no.nav.bidrag.admin.produksjonsoppfølging.jira.dto.OpprettSakRequest()
-        request.fields["project"] = _root_ide_package_.no.nav.bidrag.admin.produksjonsoppfølging.jira.dto.CodeField.withKey("FAGSYSTEM")
-        request.fields["issuetype"] = _root_ide_package_.no.nav.bidrag.admin.produksjonsoppfølging.jira.dto.CodeField.withId("13101")
-        request.fields["customfield_20813"] = listOf(_root_ide_package_.no.nav.bidrag.admin.produksjonsoppfølging.jira.dto.CodeField.withKey("CMDB-314134"))
-        request.fields["customfield_20768"] = listOf(_root_ide_package_.no.nav.bidrag.admin.produksjonsoppfølging.jira.dto.CodeField.withKey("CMDB-32629"))
-        request.fields["customfield_20730"] = listOf(_root_ide_package_.no.nav.bidrag.admin.produksjonsoppfølging.jira.dto.CodeField.withKey("CMDB-801"))
-        request.fields["customfield_21414"] = _root_ide_package_.no.nav.bidrag.admin.produksjonsoppfølging.jira.dto.CodeField.withId("25672")
-        request.fields["customfield_21417"] = _root_ide_package_.no.nav.bidrag.admin.produksjonsoppfølging.jira.dto.CodeField.withId("25684")
+        val request =
+            _root_ide_package_.no.nav.bidrag.admin.produksjonsoppfølging.jira.dto
+                .OpprettSakRequest()
+        request.fields["project"] =
+            _root_ide_package_.no.nav.bidrag.admin.produksjonsoppfølging.jira.dto.CodeField
+                .withKey("FAGSYSTEM")
+        request.fields["issuetype"] =
+            _root_ide_package_.no.nav.bidrag.admin.produksjonsoppfølging.jira.dto.CodeField
+                .withId("13101")
+        request.fields["customfield_20813"] =
+            listOf(
+                _root_ide_package_.no.nav.bidrag.admin.produksjonsoppfølging.jira.dto.CodeField
+                    .withKey("CMDB-314134"),
+            )
+        request.fields["customfield_20768"] =
+            listOf(
+                _root_ide_package_.no.nav.bidrag.admin.produksjonsoppfølging.jira.dto.CodeField
+                    .withKey("CMDB-32629"),
+            )
+        request.fields["customfield_20730"] =
+            listOf(
+                _root_ide_package_.no.nav.bidrag.admin.produksjonsoppfølging.jira.dto.CodeField
+                    .withKey("CMDB-801"),
+            )
+        request.fields["customfield_21414"] =
+            _root_ide_package_.no.nav.bidrag.admin.produksjonsoppfølging.jira.dto.CodeField
+                .withId("25672")
+        request.fields["customfield_21417"] =
+            _root_ide_package_.no.nav.bidrag.admin.produksjonsoppfølging.jira.dto.CodeField
+                .withId("25684")
         request.fields["summary"] = summary
         request.fields["description"] = beskrivelse
         if (assignee != null) {
-            request.fields["assignee"] = _root_ide_package_.no.nav.bidrag.admin.produksjonsoppfølging.jira.dto.User.withName(assignee)
+            request.fields["assignee"] =
+                _root_ide_package_.no.nav.bidrag.admin.produksjonsoppfølging.jira.dto.User
+                    .withName(assignee)
         }
 
         val issue: Issue? = restTemplate.postForObject<Issue>("$jiraUrl/api/2/issue", request)

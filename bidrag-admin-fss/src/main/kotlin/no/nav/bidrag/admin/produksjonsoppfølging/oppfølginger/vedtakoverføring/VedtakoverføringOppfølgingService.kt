@@ -1,8 +1,8 @@
 package no.nav.bidrag.admin.produksjonsoppfølging.oppfølginger.vedtakoverføring
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import no.nav.bidrag.admin.produksjonsoppfølging.oppfølginger.Oppfølging
 import no.nav.bidrag.commons.service.slack.SlackService
-import no.nav.bidrag.produksjonsoppfølging.oppfølginger.Oppfølging
 import org.springframework.stereotype.Service
 
 private val LOGGER = KotlinLogging.logger { }

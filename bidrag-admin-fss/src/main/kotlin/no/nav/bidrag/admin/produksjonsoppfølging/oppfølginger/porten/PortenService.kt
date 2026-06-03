@@ -1,10 +1,10 @@
 package no.nav.bidrag.admin.produksjonsoppfølging.oppfølginger.porten
 
 import io.github.oshai.kotlinlogging.KotlinLogging
+import no.nav.bidrag.admin.produksjonsoppfølging.jira.JiraService
+import no.nav.bidrag.admin.produksjonsoppfølging.jira.dto.JiraSak
+import no.nav.bidrag.admin.produksjonsoppfølging.oppfølginger.Oppfølging
 import no.nav.bidrag.commons.service.slack.SlackService
-import no.nav.bidrag.produksjonsoppfølging.jira.JiraService
-import no.nav.bidrag.produksjonsoppfølging.jira.dto.JiraSak
-import no.nav.bidrag.produksjonsoppfølging.oppfølginger.Oppfølging
 import org.springframework.stereotype.Service
 import java.util.regex.Matcher
 
