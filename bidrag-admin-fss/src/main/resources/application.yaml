@@ -22,7 +22,6 @@ spring:
     password: ${BISYS_DB_PASSWORD}
     driver-class-name: com.ibm.db2.jcc.DB2Driver
   jpa:
-    database-platform: org.hibernate.dialect.DB2Dialect
     open-in-view: false
 
 no.nav.security.jwt:

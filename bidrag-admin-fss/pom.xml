@@ -92,6 +92,11 @@
       <artifactId>db2jcc4</artifactId>
       <version>${db2.db2jcc4.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.ibm.db2</groupId>
+      <artifactId>jcc</artifactId>
+      <version>12.1.4.0</version>
+    </dependency>
 
     <!-- Logging -->
     <dependency>
