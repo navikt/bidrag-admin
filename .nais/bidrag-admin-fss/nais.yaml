@@ -36,6 +36,9 @@ spec:
             cluster: {{this.cluster}}
         {{/each}}
       outbound:
+        rules:
+          - application: logging
+            namespace: nais-system
         external:
           - host: {{env.BISYS_URL}}
             ports:
