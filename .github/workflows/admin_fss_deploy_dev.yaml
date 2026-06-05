@@ -6,7 +6,7 @@ on:
       - '**'
     paths:
       - '.nais/bidrag-admin-fss/**.yaml'
-      - '.github/workflows/admin_fss_deploy_prod.yaml'
+      - '.github/workflows/admin_fss_deploy_dev.yaml'
       - 'pom.xml'
       - '**/bidrag-admin-fss/**'
 
