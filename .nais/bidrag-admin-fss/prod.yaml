@@ -1,6 +1,7 @@
 name: bidrag-admin-fss
 ingresses:
   - https://bidrag-admin-fss.intern.nav.no
+bisys_url: b27wasl00850.preprod.local
 limits:
   memory: 500Mi
 requests:
