@@ -12,7 +12,6 @@
 
   <groupId>no.nav</groupId>
   <artifactId>bidrag-admin-fss</artifactId>
-  <version>${revision}</version>
   <name>bidrag-admin-fss</name>
 
   <dependencies>
@@ -21,6 +20,10 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -83,7 +86,18 @@
       <version>${nav-token-support.version}</version>
     </dependency>
 
-    <!-- Kodegenerering -->
+    <!-- db2 -->
+    <dependency>
+      <groupId>com.ibm.db2</groupId>
+      <artifactId>db2jcc4</artifactId>
+      <version>${db2.db2jcc4.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.db2</groupId>
+      <artifactId>jcc</artifactId>
+      <version>12.1.4.0</version>
+    </dependency>
+
     <!-- Logging -->
     <dependency>
       <groupId>io.github.oshai</groupId>
