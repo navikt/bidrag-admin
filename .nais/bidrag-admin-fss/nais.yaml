@@ -81,4 +81,11 @@ spec:
      - name: {{@key}}
        value: "{{this}}"
   {{/each}}
+  envFrom:
+    - secret: mr-b-slack-oauth-token
+    - secret: bidrag-bisys-db
+    - secret: bidrag-admin-prodoppfolging-jira-creds
+  filesFrom:
+    - secret: db2license
+      mountPath: /var/run/secrets/db2license
 
