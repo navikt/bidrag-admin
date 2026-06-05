@@ -18,6 +18,7 @@ spec:
       destinations:
         - id: loki
         - id: elastic
+  webproxy: true
   azure:
     application:
       enabled: true
