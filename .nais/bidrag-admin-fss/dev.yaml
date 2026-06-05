@@ -11,6 +11,13 @@ replicas:
   min: 1
 env:
   BISYS_URL: b27wasl00799.preprod.local
+  SLACK_CHANNEL_ID: dummy # Skal ikke følge opp i dev
+  DB_HOST: ztest.test.local
+  DB_PORT: 5025
+  DB_NAME: QDB2
+  BBM_DB_SCHEMA: BI460Q2
+  BISYS_DB_SCHEMA: BI464Q2
+  JIRA_URL: dummy
 azure_access_inbound:
   - application: bidrag-ui
     namespace: bidrag
