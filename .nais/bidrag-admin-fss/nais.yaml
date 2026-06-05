@@ -6,9 +6,9 @@ metadata:
   labels:
     team: bidrag
   annotations:
-      nginx.ingress.kubernetes.io/proxy-body-size: "512m"
-      nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
-      nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-body-size: "512m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
 spec:
   observability:
     autoInstrumentation:
@@ -28,20 +28,24 @@ spec:
           - "NAVident"
           - "azp_name"
   accessPolicy:
-      inbound:
-        rules:
-        {{#each azure_access_inbound}}
-          - application: {{this.application}}
-            namespace: {{this.namespace}}
-            cluster: {{this.cluster}}
-        {{/each}}
-      outbound:
-        external:
-          - host: {{env.BISYS_URL}}
-            ports:
-            - port: 9445
-          - host: slack.com
-          - host: api.slack.com
+    inbound:
+      rules:
+      {{#each azure_access_inbound}}
+        - application: {{this.application}}
+          namespace: {{this.namespace}}
+          cluster: {{this.cluster}}
+      {{/each}}
+    outbound:
+      external:
+      {{#each outbound-access-hosts}}
+        - host: {{this}}
+      {{/each}}
+      rules:
+      {{#each outbound-access-apps}}
+          - application: {{this}}
+      {{/each}}
+          - application: logging
+            namespace: nais-system
   image: {{ image }}
   liveness:
     path: /actuator/health
@@ -84,5 +88,4 @@ spec:
   filesFrom:
     - secret: db2license
       mountPath: /var/run/secrets/db2license
-
 

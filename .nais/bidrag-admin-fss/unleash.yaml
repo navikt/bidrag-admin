@@ -1,7 +1,7 @@
 apiVersion: unleash.nais.io/v1
 kind: ApiToken
 metadata:
-  name: bidrag-admin
+  name: bidrag-admin-fss
   namespace: bidrag
   labels:
     team: bidrag
