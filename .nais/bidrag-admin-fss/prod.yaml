@@ -3,10 +3,10 @@ ingresses:
   - https://bidrag-admin-fss.intern.nav.no
 bisys_url: b27wasl00850.preprod.local
 limits:
-  memory: 500Mi
+  memory: 2048Mi
 requests:
-  cpu: 50m
-  memory: 100Mi
+  cpu: 117m
+  memory: 512Mi
 replicas:
   max: 1
   min: 1
