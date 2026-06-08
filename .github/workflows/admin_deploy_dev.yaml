@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - '**'
+      - '!main'
     paths:
       - '.nais/bidrag-admin/**.yaml'
       - '.github/workflows/admin_deploy_dev.yaml'
