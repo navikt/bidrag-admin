@@ -50,7 +50,7 @@ class ObjektnummerService(
 
         barnListe.forEach {
             val objektnummerBruk = objektnummerMapping[it.objektnrSomInt()]
-            if (objektnummerBruk != null && objektnummerBruk == it.fnr) {
+            if (objektnummerBruk != null && objektnummerBruk != it.fnr) {
                 barnTilOppføging.add(it.fnr!!)
                 barnTilOppføging.add(objektnummerBruk)
             }
