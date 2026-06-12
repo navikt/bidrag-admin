@@ -17,8 +17,8 @@ class OppfølgingService(
     fun runScheduledCheck() {
         if (clusterName == "prod-fss") {
             oppfølginger.forEach { oppfølging ->
-                val klassenavn = (oppfølging::class as Any).javaClass.simpleName
-                LOGGER.info { "${"Kjør oppfølging: {}"} $klassenavn" }
+                val klassenavn = oppfølging::class.simpleName
+                LOGGER.info { "Kjør oppfølging: $klassenavn" }
                 try {
                     oppfølging.folgOpp()
                 } catch (e: Exception) {
