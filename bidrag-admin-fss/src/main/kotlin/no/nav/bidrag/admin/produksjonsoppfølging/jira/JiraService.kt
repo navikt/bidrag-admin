@@ -110,7 +110,7 @@ class JiraService(
                 jql,
             )
 
-        return response?.issues?.map { JiraSak(it.key, it.fields.summary) }?.toMutableList() ?: emptyList()
+        return response?.issues?.map { JiraSak(it.key, it.fields?.summary) }?.toMutableList() ?: emptyList()
     }
 
     fun addLabel(
