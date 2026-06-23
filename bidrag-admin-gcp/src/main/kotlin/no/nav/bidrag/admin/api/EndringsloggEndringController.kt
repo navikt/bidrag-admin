@@ -30,7 +30,10 @@ class EndringsloggEndringController(
         @PathVariable endringsloggId: Long,
         @PathVariable endringId: Long,
         @RequestBody request: LestAvBrukerRequest,
-    ): EndringsLoggDto = endringsloggService.oppdaterLestAvBrukerEndring(endringsloggId, endringId, request).toDto()
+    ): EndringsLoggDto {
+        endringsloggService.oppdaterLestAvBrukerEndring(endringsloggId, endringId, request)
+        return endringsloggService.hentEndringslogg(endringsloggId).toDto()
+    }
 
     @DeleteMapping("/{endringsloggId}/endring/{endringId}")
     @Operation(

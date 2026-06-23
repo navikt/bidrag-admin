@@ -66,7 +66,10 @@ class EndringsloggController(
     fun oppdaterLestAvBrukerEndringslogg(
         @PathVariable endringsloggId: Long,
         @RequestBody request: LestAvBrukerRequest,
-    ): EndringsLoggDto = endringsloggService.oppdaterLestAvBruker(endringsloggId, request).toDto()
+    ): EndringsLoggDto {
+        endringsloggService.oppdaterLestAvBruker(endringsloggId, request)
+        return endringsloggService.hentEndringslogg(endringsloggId).toDto()
+    }
 
     @PostMapping
     @Operation(
