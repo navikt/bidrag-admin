@@ -11,7 +11,7 @@ import jakarta.persistence.OneToOne
 import java.time.LocalDateTime
 
 @Entity(name = "lest_av_bruker")
-data class LestAvBruker(
+class LestAvBruker(
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,4 +32,13 @@ data class LestAvBruker(
     var lestTidspunkt: LocalDateTime = LocalDateTime.now(),
     @Column(name = "lestetid_varighet_ms")
     var lestetidVarighetMs: Long? = null,
-)
+) {
+    // equals/hashCode based on id only — avoids LazyInitializationException when used in HashSet
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is LestAvBruker) return false
+        return id != null && id == other.id
+    }
+
+    override fun hashCode(): Int = id?.hashCode() ?: 0
+}

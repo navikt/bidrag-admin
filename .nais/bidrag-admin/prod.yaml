@@ -35,9 +35,6 @@ azure_access_inbound:
   - application: bidrag-ui
     namespace: bidrag
     cluster: prod-fss
-  - application: bidrag-ui-feature
+  - application: bidrag-frontend
     namespace: bidrag
-    cluster: dev-fss
-  - application: bidrag-ui
-    namespace: bidrag
-    cluster: dev-fss
+    cluster: prod-gcp
