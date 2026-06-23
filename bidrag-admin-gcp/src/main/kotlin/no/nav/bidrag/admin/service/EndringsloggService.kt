@@ -102,6 +102,7 @@ class EndringsloggService(
                 endringsloggId,
             )
 
+    @Transactional
     fun hentEndringslogg(endringsloggId: Long): Endringslogg {
         val endringslogg =
             endringsloggRepository
